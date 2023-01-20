@@ -5,11 +5,11 @@
     android:layout_height="match_parent"
     tools:context=".ProfileFragment">
 
-    <!-- TODO: Update blank fragment layout -->
     <TextView
-        android:id="@+id/tvProfile"
+        android:id="@+id/tvSignOut"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:text="@string/sign_out"
+        android:layout_margin="@dimen/common_margin_default"/>
 
 </FrameLayout>

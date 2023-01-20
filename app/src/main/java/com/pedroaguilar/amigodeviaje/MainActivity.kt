@@ -2,9 +2,15 @@ package com.pedroaguilar.amigodeviaje
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.navigation.Navigation
+import com.firebase.ui.auth.AuthUI
+import com.firebase.ui.auth.IdpResponse
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseAuth.AuthStateListener
 import com.pedroaguilar.amigodeviaje.databinding.ActivityMainBinding
 import com.pedroaguilar.amigodeviaje.utils.HomeAux
 
@@ -13,6 +19,21 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var activityFragment: Fragment
     private lateinit var fragmentManager: FragmentManager
+    private lateinit var firebaseAuth: FirebaseAuth
+    private lateinit var authStateListener: AuthStateListener
+
+    private val resultLauncher =  registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
+        //Dentro proceso la respuesta
+        val response = IdpResponse.fromResultIntent(it.data)
+
+        if (it.resultCode == RESULT_OK){
+            //compruebo que exista un usuario autenticado
+            val user = FirebaseAuth.getInstance().currentUser
+            if (user != null){
+                Toast.makeText(this, getString(R.string.welcome_message), Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -20,7 +41,28 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         setupBottomNav()
+        configAuth()
     }
+
+    private fun configAuth() {
+        firebaseAuth = FirebaseAuth.getInstance()
+        authStateListener = AuthStateListener { auth ->
+            if (auth.currentUser != null){//si existe el usuario
+                //coloco el nombre del usuario en la barra de la app
+                supportActionBar?.title = auth.currentUser?.displayName
+            }else{//si no existe el usuario
+                //Autenticar desde Firebase
+                val providers = arrayListOf(AuthUI.IdpConfig.EmailBuilder().build())
+
+                //Lanzar actividad para esperar un resultado
+               resultLauncher.launch(AuthUI.getInstance()
+                    .createSignInIntentBuilder()
+                    .setAvailableProviders(providers)
+                    .build())
+            }
+        }
+    }
+
 
     /**
      * Agregar los fragmentos al contenedor para controlarlos desde los botones de navegacion
@@ -70,11 +112,22 @@ class MainActivity : AppCompatActivity() {
                 else -> false
             }
         }
-        binding.bottomNav.setOnItemReselectedListener{
-            when(it.itemId){
-                R.id.action_home -> (homeFragment as HomeAux).goToTop()
-            }
-        }
+        //volver a la parte de arriba de la app al pulsar
+//        binding.bottomNav.setOnItemReselectedListener{
+//            when(it.itemId){
+//                R.id.action_home -> (homeFragment as HomeAux).goToTop()
+//            }
+//        }
 
+    }
+
+    override fun onResume() {
+        super.onResume()
+        firebaseAuth.addAuthStateListener(authStateListener)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        firebaseAuth.removeAuthStateListener(authStateListener)
     }
 }

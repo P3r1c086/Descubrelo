@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "976015905987",
+    "project_id": "amigo-de-viaje-a960a",
+    "storage_bucket": "amigo-de-viaje-a960a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:976015905987:android:0976703624af791cb4fe76",
+        "android_client_info": {
+          "package_name": "com.pedroaguilar.amigodeviaje"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "976015905987-rhou4nlr6uni5tuftips0nioaqgo3kvp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBFtwkudVDcUdyP6oDlA08JdmAfhMkMxu0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "976015905987-rhou4nlr6uni5tuftips0nioaqgo3kvp.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
