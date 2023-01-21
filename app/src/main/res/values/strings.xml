@@ -9,4 +9,6 @@
     <string name="sign_out">Cerrar Sesión</string>
     <string name="bye_message">Hasta pronto</string>
     <string name="error_sign_out">Error al cerrar sesión.</string>
+    <string name="no_red">Sin Conexión</string>
+    <string name="text_spinner">Cargando…</string>
 </resources>

@@ -1,4 +1,4 @@
-package com.pedroaguilar.amigodeviaje.utils
+package com.pedroaguilar.amigodeviaje.common.entities.utils
 
 /**
  * Proyect: Snapshots

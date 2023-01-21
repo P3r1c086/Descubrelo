@@ -1,4 +1,4 @@
-package com.pedroaguilar.amigodeviaje
+package com.pedroaguilar.amigodeviaje.detailsModule
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

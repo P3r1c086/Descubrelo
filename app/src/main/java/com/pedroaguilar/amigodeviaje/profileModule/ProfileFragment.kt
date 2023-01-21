@@ -1,4 +1,4 @@
-package com.pedroaguilar.amigodeviaje
+package com.pedroaguilar.amigodeviaje.profileModule
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import com.firebase.ui.auth.AuthUI
+import com.pedroaguilar.amigodeviaje.R
 import com.pedroaguilar.amigodeviaje.databinding.FragmentProfileBinding
 
 class ProfileFragment : Fragment() {

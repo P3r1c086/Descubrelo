@@ -1,4 +1,4 @@
-package com.pedroaguilar.amigodeviaje
+package com.pedroaguilar.amigodeviaje.mainModule
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -6,9 +6,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.pedroaguilar.amigodeviaje.databinding.FragmentHomeBinding
+import com.pedroaguilar.amigodeviaje.common.entities.utils.HomeAux
 
 
-class HomeFragment : Fragment() {
+class HomeFragment : Fragment(), HomeAux {
 
     private lateinit var binding: FragmentHomeBinding
 
@@ -22,5 +23,9 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+    }
+
+    override fun goToTop() {
+//        binding.recyclerView.smoothScrollToPosition(0)
     }
 }

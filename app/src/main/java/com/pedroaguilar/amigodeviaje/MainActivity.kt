@@ -2,17 +2,20 @@ package com.pedroaguilar.amigodeviaje
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import androidx.navigation.Navigation
 import com.firebase.ui.auth.AuthUI
+import com.firebase.ui.auth.ErrorCodes
 import com.firebase.ui.auth.IdpResponse
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuth.AuthStateListener
+import com.pedroaguilar.amigodeviaje.addModule.AddFragment
 import com.pedroaguilar.amigodeviaje.databinding.ActivityMainBinding
-import com.pedroaguilar.amigodeviaje.utils.HomeAux
+import com.pedroaguilar.amigodeviaje.mainModule.HomeFragment
+import com.pedroaguilar.amigodeviaje.profileModule.ProfileFragment
 
 class MainActivity : AppCompatActivity() {
 
@@ -32,6 +35,20 @@ class MainActivity : AppCompatActivity() {
             if (user != null){
                 Toast.makeText(this, getString(R.string.welcome_message), Toast.LENGTH_SHORT).show()
             }
+        }else{
+            //para salir de la app al darle hacia atras en login
+            if (response == null){
+                Toast.makeText(this, getString(R.string.bye_message), Toast.LENGTH_SHORT).show()
+                finish()
+            } else {
+                response.error?.let {
+                    if (it.errorCode == ErrorCodes.NO_NETWORK){
+                        Toast.makeText(this, getString(R.string.no_red), Toast.LENGTH_SHORT).show()
+                    } else {
+                        Toast.makeText(this, "Código de error: ${it.errorCode}", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
         }
     }
 
@@ -50,14 +67,19 @@ class MainActivity : AppCompatActivity() {
             if (auth.currentUser != null){//si existe el usuario
                 //coloco el nombre del usuario en la barra de la app
                 supportActionBar?.title = auth.currentUser?.displayName
+                //oculto el spinner
+                binding.llProgress.visibility = View.GONE
             }else{//si no existe el usuario
                 //Autenticar desde Firebase
-                val providers = arrayListOf(AuthUI.IdpConfig.EmailBuilder().build())
+                val providers = arrayListOf(
+                    AuthUI.IdpConfig.EmailBuilder().build(),
+                    AuthUI.IdpConfig.GoogleBuilder().build())
 
                 //Lanzar actividad para esperar un resultado
                resultLauncher.launch(AuthUI.getInstance()
                     .createSignInIntentBuilder()
                     .setAvailableProviders(providers)
+                    .setIsSmartLockEnabled(false)
                     .build())
             }
         }
@@ -130,4 +152,5 @@ class MainActivity : AppCompatActivity() {
         super.onPause()
         firebaseAuth.removeAuthStateListener(authStateListener)
     }
+
 }
