@@ -11,4 +11,10 @@
     <string name="error_sign_out">Error al cerrar sesión.</string>
     <string name="no_red">Sin Conexión</string>
     <string name="text_spinner">Cargando…</string>
+    <string name="content_description_add">Botón para agregar una recomendación.</string>
+    <string name="content_description_home">Botón para situarte en la pantalla principal.</string>
+    <string name="content_description_profile">Botón para acceder a tu perfil.</string>
+    <string name="home_settings">Ajustes</string>
+    <string name="home_favorite">Favoritos</string>
+    <string name="content_description_favorite">Botón para acceder a tus favoritos.</string>
 </resources>

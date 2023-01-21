@@ -14,8 +14,10 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuth.AuthStateListener
 import com.pedroaguilar.amigodeviaje.addModule.AddFragment
 import com.pedroaguilar.amigodeviaje.databinding.ActivityMainBinding
+import com.pedroaguilar.amigodeviaje.favoriteModule.FavoriteFragment
 import com.pedroaguilar.amigodeviaje.mainModule.HomeFragment
 import com.pedroaguilar.amigodeviaje.profileModule.ProfileFragment
+import com.pedroaguilar.amigodeviaje.settingsModule.SettingsFragment
 
 class MainActivity : AppCompatActivity() {
 
@@ -57,6 +59,9 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        binding.bottomNavigationView.background = null
+        binding.bottomNavigationView.menu.getItem(2).isEnabled = false
+
         setupBottomNav()
         configAuth()
     }
@@ -97,6 +102,8 @@ class MainActivity : AppCompatActivity() {
         val homeFragment = HomeFragment()
         val addFragment = AddFragment()
         val profileFragment = ProfileFragment()
+        val settingsFragment = SettingsFragment()
+        val favoriteFragment = FavoriteFragment()
 
         activityFragment = homeFragment
 
@@ -105,21 +112,32 @@ class MainActivity : AppCompatActivity() {
          * Empezamos por el ultimo y terminamos por el primero.
          * "hostFragment" es el contenedor, "ProfileFragment" el fragmento y "ProfileFragment::class.java.name" la etiqueta
          */
+        fragmentManager.beginTransaction().add(R.id.nav_host_fragment, homeFragment, HomeFragment::class.java.name).commit()//Lo añadimos y a la vez lo ocultamos
+        fragmentManager.beginTransaction().add(R.id.nav_host_fragment, favoriteFragment, FavoriteFragment::class.java.name)
+            .hide(favoriteFragment).commit()//Lo añadimos y a la vez lo ocultamos
+        fragmentManager.beginTransaction().add(R.id.nav_host_fragment, settingsFragment, SettingsFragment::class.java.name)
+            .hide(settingsFragment).commit()//Lo añadimos y a la vez lo ocultamos
         fragmentManager.beginTransaction().add(R.id.nav_host_fragment, profileFragment, ProfileFragment::class.java.name)
             .hide(profileFragment).commit()//Lo añadimos y a la vez lo ocultamos
         fragmentManager.beginTransaction().add(R.id.nav_host_fragment, addFragment, AddFragment::class.java.name)
             .hide(addFragment).commit()//Lo añadimos y a la vez lo ocultamos
-        fragmentManager.beginTransaction().add(R.id.nav_host_fragment, homeFragment, HomeFragment::class.java.name).commit()//Lo añadimos y a la vez lo ocultamos
 
-        binding.bottomNav.setOnItemSelectedListener {
+
+        binding.bottomNavigationView.setOnItemSelectedListener {
             when(it.itemId){
+                R.id.action_favorite -> {
+                    //Ocultamos el fragmento activo xq no sabemos cual es y mosrtamos homeFragment
+                    fragmentManager.beginTransaction().hide(activityFragment).show(favoriteFragment).commit()
+                    activityFragment = favoriteFragment //Ponemos el homeFragment como el fragment activo
+                    true//devolvemos un true
+                }
                 R.id.action_home -> {
                     //Ocultamos el fragmento activo xq no sabemos cual es y mosrtamos homeFragment
                     fragmentManager.beginTransaction().hide(activityFragment).show(homeFragment).commit()
                     activityFragment = homeFragment //Ponemos el homeFragment como el fragment activo
                     true//devolvemos un true
                 }
-                R.id.action_add -> {
+                R.id.placeholder -> {
                     //Ocultamos el fragmento activo xq no sabemos cual es y mosrtamos homeFragment
                     fragmentManager.beginTransaction().hide(activityFragment).show(addFragment).commit()
                     activityFragment = addFragment //Ponemos el homeFragment como el fragment activo
@@ -129,6 +147,12 @@ class MainActivity : AppCompatActivity() {
                     //Ocultamos el fragmento activo xq no sabemos cual es y mosrtamos homeFragment
                     fragmentManager.beginTransaction().hide(activityFragment).show(profileFragment).commit()
                     activityFragment = profileFragment //Ponemos el homeFragment como el fragment activo
+                    true//devolvemos un true
+                }
+                R.id.action_settings -> {
+                    //Ocultamos el fragmento activo xq no sabemos cual es y mosrtamos homeFragment
+                    fragmentManager.beginTransaction().hide(activityFragment).show(settingsFragment).commit()
+                    activityFragment = settingsFragment //Ponemos el homeFragment como el fragment activo
                     true//devolvemos un true
                 }
                 else -> false
