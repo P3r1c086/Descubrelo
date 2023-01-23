@@ -61,6 +61,8 @@ dependencies {
     implementation platform('com.google.firebase:firebase-bom:31.2.0')
     // FirebaseUI for Firebase Auth
     implementation 'com.firebaseui:firebase-ui-auth:8.0.2'
+    //Firebase Realtime Database
+    implementation 'com.google.firebase:firebase-database-ktx'
     // ViewModel
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
 
@@ -74,6 +76,13 @@ dependencies {
     implementation "com.github.bumptech.glide:glide:$glide_version"
     kapt "com.github.bumptech.glide:compiler:$glide_version"
 
+    // Circle Indicator (To fix the xml preview "Missing classes" error)
+    implementation 'me.relex:circleindicator:2.1.6'
+    //Carrusel
+    implementation 'org.imaginativeworld.whynotimagecarousel:whynotimagecarousel:2.1.0'
+
+    //cardCiew
+    implementation "androidx.cardview:cardview:1.0.0"
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
