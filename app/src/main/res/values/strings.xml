@@ -17,4 +17,10 @@
     <string name="home_settings">Ajustes</string>
     <string name="home_favorite">Favoritos</string>
     <string name="content_description_favorite">Botón para acceder a tus favoritos.</string>
+    <string name="text_btn_turismo">Turismo</string>
+    <string name="text_btn_aventura">Aventura</string>
+    <string name="text_btn_fiesta">Fiesta</string>
+    <string name="text_btn_dormir">Dormir</string>
+    <string name="text_btn_comer">Comer</string>
+    <string name="title_weekend_card">Ideas para el fin de semana</string>
 </resources>

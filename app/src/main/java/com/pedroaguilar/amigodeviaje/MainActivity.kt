@@ -112,16 +112,15 @@ class MainActivity : AppCompatActivity() {
          * Empezamos por el ultimo y terminamos por el primero.
          * "hostFragment" es el contenedor, "ProfileFragment" el fragmento y "ProfileFragment::class.java.name" la etiqueta
          */
-        fragmentManager.beginTransaction().add(R.id.nav_host_fragment, homeFragment, HomeFragment::class.java.name).commit()//Lo añadimos y a la vez lo ocultamos
-        fragmentManager.beginTransaction().add(R.id.nav_host_fragment, favoriteFragment, FavoriteFragment::class.java.name)
-            .hide(favoriteFragment).commit()//Lo añadimos y a la vez lo ocultamos
         fragmentManager.beginTransaction().add(R.id.nav_host_fragment, settingsFragment, SettingsFragment::class.java.name)
             .hide(settingsFragment).commit()//Lo añadimos y a la vez lo ocultamos
         fragmentManager.beginTransaction().add(R.id.nav_host_fragment, profileFragment, ProfileFragment::class.java.name)
             .hide(profileFragment).commit()//Lo añadimos y a la vez lo ocultamos
         fragmentManager.beginTransaction().add(R.id.nav_host_fragment, addFragment, AddFragment::class.java.name)
             .hide(addFragment).commit()//Lo añadimos y a la vez lo ocultamos
-
+        fragmentManager.beginTransaction().add(R.id.nav_host_fragment, homeFragment, HomeFragment::class.java.name).commit()//Lo añadimos y a la vez lo ocultamos
+        fragmentManager.beginTransaction().add(R.id.nav_host_fragment, favoriteFragment, FavoriteFragment::class.java.name)
+            .hide(favoriteFragment).commit()//Lo añadimos y a la vez lo ocultamos
 
         binding.bottomNavigationView.setOnItemSelectedListener {
             when(it.itemId){

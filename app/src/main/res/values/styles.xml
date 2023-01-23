@@ -6,4 +6,9 @@
         <item name="colorPrimaryVariant">#0F9D58</item>
         <item name="colorOnPrimary">#000</item>
     </style>
-</resources>
+
+<!--    <style name="Widget.MaterialComponents.Button" parent="">-->
+<!--        <item name="colorPrimary">@color/colorPrimary</item>-->
+<!--        <item name="colorOnPrimary">@color/colorOnPrimary</item>-->
+<!--    </style>-->
+    </resources>
