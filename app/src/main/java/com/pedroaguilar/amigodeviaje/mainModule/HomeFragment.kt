@@ -12,7 +12,7 @@ import org.imaginativeworld.whynotimagecarousel.ImageCarousel
 import org.imaginativeworld.whynotimagecarousel.model.CarouselItem
 
 
-class HomeFragment : Fragment(), HomeAux {
+class HomeFragment : Fragment() {
 
     private lateinit var binding: FragmentHomeBinding
     private val list = mutableListOf<CarouselItem>()
@@ -28,9 +28,9 @@ class HomeFragment : Fragment(), HomeAux {
         loadCarruselImagesList()
     }
 
-    override fun goToTop() {
-//        binding.recyclerView.smoothScrollToPosition(0)
-    }
+//    override fun goToTop() {
+////        binding.recyclerView.smoothScrollToPosition(0)
+//    }
 
     private fun loadCarruselImagesList(){
         val carousel: ImageCarousel = binding.carousel

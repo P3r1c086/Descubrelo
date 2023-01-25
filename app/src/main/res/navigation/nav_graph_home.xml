@@ -23,22 +23,22 @@
         android:label="Detalles"
         tools:layout="@layout/fragment_details" />
     <fragment
-        android:id="@+id/addFragment"
+        android:id="@+id/add_dest"
         android:name="com.pedroaguilar.amigodeviaje.addModule.AddFragment"
         android:label="Agregar"
         tools:layout="@layout/fragment_add" />
     <fragment
-        android:id="@+id/profileFragment"
+        android:id="@+id/profile_dest"
         android:name="com.pedroaguilar.amigodeviaje.profileModule.ProfileFragment"
         android:label="Perfil"
         tools:layout="@layout/fragment_profile" />
     <fragment
-        android:id="@+id/settingsFragment"
+        android:id="@+id/settings_dest"
         android:name="com.pedroaguilar.amigodeviaje.settingsModule.SettingsFragment"
         android:label="fragment_settings"
         tools:layout="@layout/fragment_settings" />
     <fragment
-        android:id="@+id/favoriteFragment"
+        android:id="@+id/favorite_dest"
         android:name="com.pedroaguilar.amigodeviaje.favoriteModule.FavoriteFragment"
         android:label="fragment_favorite"
         tools:layout="@layout/fragment_favorite" />
