@@ -8,5 +8,5 @@ package com.pedroaguilar.amigodeviaje.common.utils
  * All rights reserved 2022
  **/
 interface HomeAux {
-    fun goToTop()
+//    fun goToTop()
 }

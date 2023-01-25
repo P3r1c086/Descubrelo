@@ -23,4 +23,38 @@
     <string name="text_btn_dormir">Dormir</string>
     <string name="text_btn_comer">Comer</string>
     <string name="title_weekend_card">Ideas para el fin de semana</string>
+    <string name="title_add">¿Qué tipo de sujerencia quieres agregar?</string>
+<!--  Arrays-Spinner  -->
+    <string-array name="sujerencias_comer">
+        <item>Tipo de Local</item>
+        <item>Restaurante</item>
+        <item>Tapear</item>
+        <item>Comida Rápida</item>
+    </string-array>
+    <string-array name="sujerencias_dormir">
+        <item>Tipo de Local</item>
+        <item>Hotel</item>
+        <item>Motel</item>
+        <item>Hostal</item>
+        <item>Camping</item>
+    </string-array>
+    <string-array name="sujerencias_fiesta">
+        <item>Tipo de Local</item>
+        <item>Discoteca</item>
+        <item>Karaoke</item>
+        <item>Pub</item>
+    </string-array>
+    <string-array name="sujerencias_turismo">
+        <item>Tipo</item>
+        <item>Monumento</item>
+        <item>Teatro</item>
+        <item>Musical</item>
+    </string-array>
+    <string-array name="sujerencias_aventura">
+        <item>Tipo</item>
+        <item>Ruta</item>
+        <item>Esquiar</item>
+        <item>Escalada</item>
+        <item>Puenting</item>
+    </string-array>
 </resources>
