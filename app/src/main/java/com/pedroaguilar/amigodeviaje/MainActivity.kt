@@ -124,6 +124,11 @@ class MainActivity : AppCompatActivity() {
 
         binding.bottomNavigationView.setupWithNavController(navController)
 
+        val mAppBarConfiguration: AppBarConfiguration = Builder(
+            navController.graph)
+            .build()
+        setupWithNavController(binding.toolbar, navController, mAppBarConfiguration)
+
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
                 R.id.home_dest, R.id.profile_dest, R.id.settings_dest, R.id. favorite_dest-> showBottomNav()
