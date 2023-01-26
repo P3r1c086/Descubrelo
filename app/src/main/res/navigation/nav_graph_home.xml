@@ -5,7 +5,6 @@
     android:id="@+id/nav_graph_home"
     app:startDestination="@id/home_dest">
 
-
     <fragment
         android:id="@+id/home_dest"
         android:name="com.pedroaguilar.amigodeviaje.mainModule.HomeFragment"
@@ -14,6 +13,11 @@
         <action
             android:id="@+id/action_homeFragment_to_detailsFragment"
             app:destination="@id/details_dest"
+            android:inAnimation="@android:anim/slide_in_left"
+            android:outAnimation="@android:anim/slide_out_right"/>
+        <action
+            android:id="@+id/action_homeFragment_to_addFragment"
+            app:destination="@id/add_dest"
             android:inAnimation="@android:anim/slide_in_left"
             android:outAnimation="@android:anim/slide_out_right"/>
     </fragment>
@@ -31,15 +35,33 @@
         android:id="@+id/profile_dest"
         android:name="com.pedroaguilar.amigodeviaje.profileModule.ProfileFragment"
         android:label="Perfil"
-        tools:layout="@layout/fragment_profile" />
+        tools:layout="@layout/fragment_profile" >
+        <action
+            android:id="@+id/action_homeFragment_to_addFragment"
+            app:destination="@id/add_dest"
+            android:inAnimation="@android:anim/slide_in_left"
+            android:outAnimation="@android:anim/slide_out_right"/>
+    </fragment>
     <fragment
         android:id="@+id/settings_dest"
         android:name="com.pedroaguilar.amigodeviaje.settingsModule.SettingsFragment"
         android:label="fragment_settings"
-        tools:layout="@layout/fragment_settings" />
+        tools:layout="@layout/fragment_settings" >
+        <action
+            android:id="@+id/action_homeFragment_to_addFragment"
+            app:destination="@id/add_dest"
+            android:inAnimation="@android:anim/slide_in_left"
+            android:outAnimation="@android:anim/slide_out_right"/>
+    </fragment>
     <fragment
         android:id="@+id/favorite_dest"
         android:name="com.pedroaguilar.amigodeviaje.favoriteModule.FavoriteFragment"
         android:label="fragment_favorite"
-        tools:layout="@layout/fragment_favorite" />
+        tools:layout="@layout/fragment_favorite" >
+        <action
+            android:id="@+id/action_homeFragment_to_addFragment"
+            app:destination="@id/add_dest"
+            android:inAnimation="@android:anim/slide_in_left"
+            android:outAnimation="@android:anim/slide_out_right"/>
+    </fragment>
 </navigation>
