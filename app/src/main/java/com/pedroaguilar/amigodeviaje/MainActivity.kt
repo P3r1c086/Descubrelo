@@ -2,33 +2,24 @@ package com.pedroaguilar.amigodeviaje
 
 
 import android.os.Bundle
-import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentTransaction
 import androidx.navigation.NavController
-import androidx.navigation.NavDestination
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.AppBarConfiguration.Builder
-import androidx.navigation.ui.NavigationUI.onNavDestinationSelected
 import androidx.navigation.ui.NavigationUI.setupWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.ErrorCodes
 import com.firebase.ui.auth.IdpResponse
-import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuth.AuthStateListener
-import com.pedroaguilar.amigodeviaje.addModule.AddFragment
 import com.pedroaguilar.amigodeviaje.databinding.ActivityMainBinding
-import java.util.*
 
 
 class MainActivity : AppCompatActivity() {
@@ -140,11 +131,13 @@ class MainActivity : AppCompatActivity() {
     private fun showBottomNav() {
         binding.bottomAppBar.visibility = View.VISIBLE
         binding.fab.visibility = View.VISIBLE
+        binding.toolbar.navigationIcon = null
     }
 
     private fun hideBottomNav() {
         binding.bottomAppBar.visibility = View.GONE
         binding.fab.visibility = View.GONE
+        binding.toolbar.setNavigationIcon(androidx.appcompat.R.drawable.abc_ic_ab_back_material)
     }
 
     override fun onResume() {
