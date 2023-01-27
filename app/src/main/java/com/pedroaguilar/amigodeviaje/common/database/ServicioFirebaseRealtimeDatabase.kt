@@ -1,7 +1,7 @@
 package com.pedroaguilar.amigodeviaje.common.database
 
 import com.google.firebase.database.FirebaseDatabase
-import com.pedroaguilar.amigodeviaje.common.entities.Sujerencia
+import com.pedroaguilar.amigodeviaje.common.entities.Sugerencia
 
 /**
  * Proyect: Amigo De Viaje
@@ -16,8 +16,8 @@ class ServicioFirebaseRealtimeDatabase {
     private val databaseReferenceSujerencia = FirebaseDatabase.getInstance().getReference("Sujerencias")
 
 
-   suspend fun crearSujerencia(firebaseAuthUsuarioId: String, sujerencia: Sujerencia?) {
+   suspend fun crearSujerencia(firebaseAuthUsuarioId: String, sugerencia: Sugerencia?) {
         databaseReferenceSujerencia
-            .child(firebaseAuthUsuarioId).setValue(sujerencia)
+            .child(firebaseAuthUsuarioId).setValue(sugerencia)
     }
 }

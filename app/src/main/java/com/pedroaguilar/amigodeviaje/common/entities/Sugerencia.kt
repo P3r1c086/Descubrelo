@@ -9,7 +9,7 @@ import com.google.firebase.firestore.Exclude
  * More info: linkedin.com/in/pedro-aguilar-fernández-167753140
  * All rights reserved 2023
  **/
-data class Sujerencia(
+data class Sugerencia(
     @get:Exclude var id: String? = null,
     var name: String? = null,
     var description: String? = null,
@@ -19,7 +19,7 @@ data class Sujerencia(
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
 
-        other as Sujerencia
+        other as Sugerencia
 
         if (id != other.id) return false
 

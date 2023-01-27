@@ -24,7 +24,9 @@
     <string name="text_btn_comer">Comer</string>
     <string name="title_weekend_card">Ideas para el fin de semana</string>
     <string name="title_add">¿Qué tipo de sujerencia quieres agregar?</string>
-<!--  Arrays-Spinner  -->
+    <string name="title_home_fragment">¿Qué te apetece hacer?</string>
+    <string name="title_SuggestionsUsers_card">Últimas sugerencias de usuarios</string>
+    <!--  Arrays-Spinner  -->
     <string-array name="sujerencias_comer">
         <item>Tipo de Local</item>
         <item>Restaurante</item>

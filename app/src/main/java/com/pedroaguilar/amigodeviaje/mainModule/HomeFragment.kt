@@ -34,7 +34,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun loadCarruselImagesList(){
-        with (binding.carousel){
+        with (binding.carouselWeekend){
             autoPlay = true
             addData(list)
             carouselListener = object : CarouselListener {

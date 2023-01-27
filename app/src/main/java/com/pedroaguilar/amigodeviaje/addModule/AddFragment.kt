@@ -6,20 +6,19 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
-import com.pedroaguilar.amigodeviaje.R
 import com.pedroaguilar.amigodeviaje.common.Constants
 import com.pedroaguilar.amigodeviaje.common.entities.EventPost
-import com.pedroaguilar.amigodeviaje.common.entities.Sujerencia
+import com.pedroaguilar.amigodeviaje.common.entities.Sugerencia
 import com.pedroaguilar.amigodeviaje.databinding.FragmentAddBinding
 
 
@@ -27,7 +26,7 @@ class AddFragment : Fragment() {
 
     private var binding: FragmentAddBinding? = null
 
-    private var sujerencia: Sujerencia? = null
+    private var sugerencia: Sugerencia? = null
 
     //variables globales para cargar imagen en la imageView o subirlo a cloud Storage
     private var photoSelectedUri: Uri? = null
@@ -61,7 +60,7 @@ class AddFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        //todo: Modificar tamaño container a match_parent
         configButtons()
         listener()
     }
@@ -76,25 +75,21 @@ class AddFragment : Fragment() {
             //como binding puede ser null
             binding?.let {
                 //subir imagen al storage. Recibe un callBack
-                uploadImage(sujerencia?.id) { eventPost ->
+                uploadImage(sugerencia?.id) { eventPost ->
                     //si la imagen fue subida correctamente
                     if (eventPost.isSuccess){
-                        if (sujerencia == null){//si el producto es null, lo creamos
-                            val sujerencia = Sujerencia(name = it.etNombreSuj.text.toString().trim(),
+                        if (sugerencia == null){//si el producto es null, lo creamos
+                            val sugerencia = Sugerencia(name = it.etNombreSuj.text.toString().trim(),
                                 description = it.etDescriptionSuj.text.toString().trim(),
                                 imgUrl = eventPost.photoUrl)
 
-                            save(sujerencia, eventPost.documentId!!)
+                            save(sugerencia, eventPost.documentId!!)
                         }else{//si no es null, retomamos nuestro producto y le damos los nuevos valores,
                             //es decir, es una actualizacion
-                            sujerencia?.apply {
+                            sugerencia?.apply {
                                 name = it.etNombreSuj.text.toString().trim()
                                 description = it.etDescriptionSuj.text.toString().trim()
                                 imgUrl = eventPost.photoUrl
-                                //una vez tenemos el producto con las nuevas propiedades, llamamos a un
-                                // metodo que lo actualice
-//                                update(this)//debido a apply, en vez poner el producto, ponemos el
-                                //contexto
                             }
                         }
                     }
@@ -172,13 +167,13 @@ class AddFragment : Fragment() {
         }
     }
 
-    private fun save(sujerencia: Sujerencia, documentId: String){
+    private fun save(sugerencia: Sugerencia, documentId: String){
         //creamos una instancia de la base de datos de Firestore
         val db = FirebaseFirestore.getInstance()
         db.collection(Constants.COLL_SUGGEST)
             //le seteamos el id de forma manual
             .document(documentId)
-            .set(sujerencia)
+            .set(sugerencia)
 //            .add(product)
             .addOnSuccessListener {
                 Toast.makeText(activity, "Sujerencia añadida.", Toast.LENGTH_SHORT).show()
