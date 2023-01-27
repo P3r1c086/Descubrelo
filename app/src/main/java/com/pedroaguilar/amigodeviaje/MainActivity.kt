@@ -18,6 +18,7 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.AppBarConfiguration.Builder
 import androidx.navigation.ui.NavigationUI.onNavDestinationSelected
 import androidx.navigation.ui.NavigationUI.setupWithNavController
+import androidx.navigation.ui.setupWithNavController
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.ErrorCodes
 import com.firebase.ui.auth.IdpResponse
@@ -37,6 +38,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var fragmentManager: FragmentManager
     private lateinit var firebaseAuth: FirebaseAuth
     private lateinit var authStateListener: AuthStateListener
+
+    private lateinit var navController: NavController
 
     private val resultLauncher =  registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
         //Dentro proceso la respuesta
@@ -81,15 +84,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun listener() {
         binding.fab.setOnClickListener {
-            binding.bottomNavigationView.visibility = View.GONE
-            binding.fab.visibility = View.GONE
-            binding.bottomAppBar.visibility = View.GONE
-            //Obtiene el Fragment manager
-            val fm = supportFragmentManager
-            val ft: FragmentTransaction = fm.beginTransaction().hide(activityFragment).show(AddFragment())
-            //agrega el Fragment en el contenedor, en este caso el FrameLayout con id `FrameLayout`.
-            ft.add(R.id.nav_host_fragment, AddFragment())
-            ft.commit()
+            navController.navigate(R.id.action_homeFragment_to_addFragment)
         }
     }
 
@@ -122,133 +117,30 @@ class MainActivity : AppCompatActivity() {
      * Agregar los fragmentos al contenedor para controlarlos desde los botones de navegacion
      */
     private fun setupBottomNav() {
-        val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
-        val toolbar = findViewById<Toolbar>(R.id.toolbar)
-
         // Pasar cada ID de menú como un conjunto de Ids porque cada menú debe ser considerado como destinos de primer nivel.
         val navHostFragment =
-            supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment?
-        val navController = Objects.requireNonNull(navHostFragment)?.navController
+            supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+        navController = navHostFragment.navController
 
-        //Cuando cambie la navegación, gracias al listener, esta parte salta.
-        navController?.addOnDestinationChangedListener { navController1: NavController, navDestination: NavDestination?, bundle: Bundle? ->
-            //se almacena el id de la ruta para actualizar el elemento del menu
-            val routeId = navController1.currentDestination!!.id
-            if (routeId == R.id.home_dest)
-                bottomNavigationView.menu.getItem(0).isChecked = true
-            else if (routeId == R.id.favorite_dest)
-                bottomNavigationView.menu.getItem(1).isChecked = true
-            else if (routeId == R.id.add_dest)
-                bottomNavigationView.menu.getItem(2).isChecked = true
-            else if (routeId == R.id.profile_dest)
-                bottomNavigationView.menu.getItem(3).isChecked = true
-            else if (routeId == R.id.settings_dest)
-                bottomNavigationView.menu.getItem(4).isChecked = true
+        binding.bottomNavigationView.setupWithNavController(navController)
 
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            when (destination.id) {
+                R.id.home_dest, R.id.profile_dest, R.id.settings_dest, R.id. favorite_dest-> showBottomNav()
+                else -> hideBottomNav()
+            }
         }
-        val mAppBarConfiguration: AppBarConfiguration = Builder(
-            navController!!.graph)
-            .build()
-        setupWithNavController(toolbar, navController, mAppBarConfiguration)
-//        bottomNavigationView.setNavigationItemSelectedListener(NavigationView.OnNavigationItemSelectedListener { item: MenuItem? ->
-//
-//            onNavDestinationSelected(item!!, navController)
-//        })
+    }
 
+    private fun showBottomNav() {
+        binding.bottomAppBar.visibility = View.VISIBLE
+        binding.fab.visibility = View.VISIBLE
+    }
 
-
-
-//        //Inicializar el FragmentManager
-//        fragmentManager = supportFragmentManager
-//
-//        //Instanciar todos los fragmentos disponibles en este proyecto
-//        val homeFragment = HomeFragment()
-//        val addFragment = AddFragment()
-//        val profileFragment = ProfileFragment()
-//        val settingsFragment = SettingsFragment()
-//        val favoriteFragment = FavoriteFragment()
-//
-//        activityFragment = homeFragment
-//
-//        /**
-//         * Mediante el fragmentManager controlaremos cual se muestra en cada momento.
-//         * Empezamos por el ultimo y terminamos por el primero.
-//         * "hostFragment" es el contenedor, "ProfileFragment" el fragmento y "ProfileFragment::class.java.name" la etiqueta
-//         */
-//        fragmentManager.beginTransaction().add(R.id.nav_host_fragment, settingsFragment, SettingsFragment::class.java.name)
-//            .hide(settingsFragment).commit()//Lo añadimos y a la vez lo ocultamos
-//        fragmentManager.beginTransaction().add(R.id.nav_host_fragment, profileFragment, ProfileFragment::class.java.name)
-//            .hide(profileFragment).commit()//Lo añadimos y a la vez lo ocultamos
-//        fragmentManager.beginTransaction().add(R.id.nav_host_fragment, addFragment, AddFragment::class.java.name)
-//            .hide(addFragment).commit() //Lo añadimos y a la vez lo ocultamos
-//        fragmentManager.beginTransaction().add(R.id.nav_host_fragment, homeFragment, HomeFragment::class.java.name).commit()//Lo añadimos y a la vez lo ocultamos
-//        fragmentManager.beginTransaction().add(R.id.nav_host_fragment, favoriteFragment, FavoriteFragment::class.java.name)
-//            .hide(favoriteFragment).commit()//Lo añadimos y a la vez lo ocultamos
-//
-//        binding.bottomNavigationView.setOnItemSelectedListener {
-//            when(it.itemId){
-//                R.id.action_favorite -> {
-//                    //Ocultamos el fragmento activo xq no sabemos cual es y mosrtamos homeFragment
-//                    fragmentManager.beginTransaction().hide(activityFragment).show(favoriteFragment).commit()
-//                    activityFragment = favoriteFragment //Ponemos el homeFragment como el fragment activo
-//                    true//devolvemos un true
-//                }
-//                R.id.action_home -> {
-//                    //Ocultamos el fragmento activo xq no sabemos cual es y mosrtamos homeFragment
-//                    fragmentManager.beginTransaction().hide(activityFragment).show(homeFragment).commit()
-//                    activityFragment = homeFragment //Ponemos el homeFragment como el fragment activo
-//                    true//devolvemos un true
-//                }
-//                R.id.action_add -> {
-//                    //Ocultamos el fragmento activo xq no sabemos cual es y mosrtamos homeFragment
-//                    fragmentManager.beginTransaction().hide(activityFragment).show(addFragment).commit()
-//                    activityFragment = addFragment //Ponemos el homeFragment como el fragment activo
-//                    true//devolvemos un true
-//                }
-//                R.id.action_profile -> {
-//                    //Ocultamos el fragmento activo xq no sabemos cual es y mosrtamos homeFragment
-//                    fragmentManager.beginTransaction().hide(activityFragment).show(profileFragment).commit()
-//                    activityFragment = profileFragment //Ponemos el homeFragment como el fragment activo
-//                    true//devolvemos un true
-//                }
-//                R.id.action_settings -> {
-//                    //Ocultamos el fragmento activo xq no sabemos cual es y mosrtamos homeFragment
-//                    fragmentManager.beginTransaction().hide(activityFragment).show(settingsFragment).commit()
-//                    activityFragment = settingsFragment //Ponemos el homeFragment como el fragment activo
-//                    true//devolvemos un true
-//                }
-//                else -> false
-//            }
-        }
-        //volver a la parte de arriba de la app al pulsar
-//        binding.bottomNav.setOnItemReselectedListener{
-//            when(it.itemId){
-//                R.id.action_home -> (homeFragment as HomeAux).goToTop()
-//            }
-//        }
-
-
-
-//    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-//        menuInflater.inflate(R.menu.bottom_nav_menu, menu)
-//        return super.onCreateOptionsMenu(menu)
-//    }
-//
-//    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-//        when(item.itemId){
-//            //onBackPressed hace que se retroceda
-//            android.R.id.home -> onBackPressed()//android.R.id.home hace referencia a la flecha de retroceso para el menu
-//
-//        }
-//
-//        //esto es lo mismo pero con if y else if
-////        if (item.itemId == R.id.action_save){
-////            sendData()
-////        }else if (item.itemId == android.R.id.home){
-////            onBackPressed()
-////        }
-//        return super.onOptionsItemSelected(item)
-//    }
+    private fun hideBottomNav() {
+        binding.bottomAppBar.visibility = View.GONE
+        binding.fab.visibility = View.GONE
+    }
 
     override fun onResume() {
         super.onResume()
