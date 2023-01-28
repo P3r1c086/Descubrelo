@@ -27,6 +27,11 @@
     <string name="title_home_fragment">¿Qué te apetece hacer?</string>
     <string name="title_SuggestionsUsers_card">Últimas sugerencias de usuarios</string>
     <!--  Arrays-Spinner  -->
+
+    <string name="connectivity_error">Connectivity Error</string>
+    <string name="server_error">Server Error: </string>
+    <string name="unknown_error">Unknown Error</string>
+<!--  Arrays-Spinner  -->
     <string-array name="sujerencias_comer">
         <item>Tipo de Local</item>
         <item>Restaurante</item>

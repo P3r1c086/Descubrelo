@@ -5,9 +5,8 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
@@ -19,14 +18,17 @@ import com.firebase.ui.auth.ErrorCodes
 import com.firebase.ui.auth.IdpResponse
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuth.AuthStateListener
+import com.pedroaguilar.amigodeviaje.common.Error.Connectivity
+import com.pedroaguilar.amigodeviaje.common.Error.Server
+import com.pedroaguilar.amigodeviaje.common.launchAndCollect
 import com.pedroaguilar.amigodeviaje.databinding.ActivityMainBinding
 
 
 class MainActivity : AppCompatActivity() {
 
+    private val viewModel: MainViewModel by viewModels()
+
     private lateinit var binding: ActivityMainBinding
-    private lateinit var activityFragment: Fragment
-    private lateinit var fragmentManager: FragmentManager
     private lateinit var firebaseAuth: FirebaseAuth
     private lateinit var authStateListener: AuthStateListener
 
@@ -64,6 +66,15 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // Estructura que se usa para enganchar la vista a las actualizaciones del estado en el viewmodel
+        //En un fragmento sería: viewLifecycleOwner.launchAndCollect(viewModel.state) {}
+
+        lifecycle.launchAndCollect(viewModel.state) {
+            binding.loading = it.loading
+            binding.usuario = it.usuario
+            binding.error = it.error?.let(::errorToString)
+        }
+
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         binding.bottomNavigationView.background = null
         binding.bottomNavigationView.menu.getItem(2).isEnabled = false
@@ -82,11 +93,16 @@ class MainActivity : AppCompatActivity() {
     private fun configAuth() {
         firebaseAuth = FirebaseAuth.getInstance()
         authStateListener = AuthStateListener { auth ->
-            if (auth.currentUser != null){//si existe el usuario
+            if (auth.currentUser != null){ //si existe el usuario
                 //coloco el nombre del usuario en la barra de la app
-                supportActionBar?.title = auth.currentUser?.displayName
+                FirebaseAuth.getInstance().uid?.let { id ->
+                    FirebaseAuth.getInstance().currentUser?.displayName?.let { name ->
+                        viewModel.registrarUsuarioEnFirebaseDatabase(id, name)
+                    }
+                }
+                //supportActionBar?.title = auth.currentUser?.displayName
                 //oculto el spinner
-                binding.llProgress.visibility = View.GONE
+                //binding.llProgress.visibility = View.GONE
             }else{//si no existe el usuario
                 //Autenticar desde Firebase
                 val providers = arrayListOf(
@@ -157,4 +173,9 @@ class MainActivity : AppCompatActivity() {
         firebaseAuth.removeAuthStateListener(authStateListener)
     }
 
+    private fun errorToString(error: com.pedroaguilar.amigodeviaje.common.Error) = when (error) {
+        Connectivity -> applicationContext.getString(R.string.connectivity_error)
+        is Server -> applicationContext.getString(R.string.server_error) + error.code
+        else -> applicationContext.getString(R.string.unknown_error)
+    }
 }
