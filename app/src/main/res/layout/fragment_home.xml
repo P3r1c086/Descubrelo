@@ -6,8 +6,9 @@
     android:layout_height="match_parent">
 <LinearLayout
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical"
+    android:background="?attr/colorSecondary"
     tools:context=".mainModule.HomeFragment">
 
     <TextView
@@ -88,7 +89,8 @@
         android:layout_width="match_parent"
         android:layout_height="316dp"
         android:elevation="10dp"
-        android:layout_marginHorizontal="@dimen/common_padding_min">
+        android:layout_marginHorizontal="@dimen/common_padding_min"
+        android:backgroundTint="?attr/colorPrimaryVariant">
 
         <org.imaginativeworld.whynotimagecarousel.ImageCarousel
             android:id="@+id/carouselWeekend"
@@ -101,7 +103,8 @@
             android:layout_gravity="bottom|center_horizontal"
             android:layout_marginBottom="@dimen/common_padding_default"
             android:textSize="20sp"
-            android:textStyle="bold"/>
+            android:textStyle="bold"
+            android:textColor="?attr/colorOnPrimary"/>
     </androidx.cardview.widget.CardView>
 
     <androidx.cardview.widget.CardView
@@ -109,7 +112,9 @@
         android:layout_height="316dp"
         android:elevation="10dp"
         android:layout_marginHorizontal="@dimen/common_padding_min"
-        android:layout_marginTop="@dimen/common_padding_default">
+        android:layout_marginTop="@dimen/common_padding_default"
+        android:layout_marginBottom="@dimen/common_padding_middle"
+        android:backgroundTint="?attr/colorPrimaryVariant">
 
         <org.imaginativeworld.whynotimagecarousel.ImageCarousel
             android:id="@+id/carouselSuggestionsUsers"
@@ -122,7 +127,8 @@
             android:layout_gravity="bottom|center_horizontal"
             android:layout_marginBottom="@dimen/common_padding_default"
             android:textSize="20sp"
-            android:textStyle="bold"/>
+            android:textStyle="bold"
+            android:textColor="?attr/colorOnPrimary"/>
     </androidx.cardview.widget.CardView>
 
 </LinearLayout>

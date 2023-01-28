@@ -2,9 +2,13 @@
 <resources>
     <!-- Base application theme. -->
     <style name="Theme.Fab_Bottom_app_bar" parent="Theme.MaterialComponents.Light.NoActionBar">
-        <item name="colorPrimary">#0F9D58</item>
-        <item name="colorPrimaryVariant">#0F9D58</item>
-        <item name="colorOnPrimary">#000</item>
+        <item name="colorPrimary">#8e24aa</item>
+        <item name="colorPrimaryVariant">#5c007a</item>
+        <item name="colorOnPrimary">#FFFFFFFF</item>
+        <item name="colorSecondary">#82aaf4</item>
+        <item name="colorSecondaryVariant">#b6dbff</item>
+        <item name="colorOnSecondary">#000000</item>
+        <item name="android:statusBarColor">#5C007A</item>
     </style>
 
 <!--    <style name="Widget.MaterialComponents.Button" parent="">-->
