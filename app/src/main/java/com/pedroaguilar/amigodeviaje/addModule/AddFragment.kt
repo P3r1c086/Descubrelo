@@ -12,10 +12,12 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
+import com.pedroaguilar.amigodeviaje.addModule.viewModel.AddSuggestionViewModel
 import com.pedroaguilar.amigodeviaje.common.Constants
 import com.pedroaguilar.amigodeviaje.common.entities.EventPost
 import com.pedroaguilar.amigodeviaje.common.entities.Sugerencia
@@ -27,6 +29,7 @@ class AddFragment : Fragment() {
     private var binding: FragmentAddBinding? = null
 
     private var sugerencia: Sugerencia? = null
+    private lateinit var addSuggestionViewModel: AddSuggestionViewModel
 
     //variables globales para cargar imagen en la imageView o subirlo a cloud Storage
     private var photoSelectedUri: Uri? = null
@@ -52,6 +55,11 @@ class AddFragment : Fragment() {
         }
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        addSuggestionViewModel = ViewModelProvider(requireActivity())[AddSuggestionViewModel::class.java]
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         binding = FragmentAddBinding.inflate(inflater, container, false)
@@ -70,7 +78,7 @@ class AddFragment : Fragment() {
     private fun listener() {
 
         binding?.btnAceptar?.setOnClickListener {
-            //creamos un nuevo producto. El id debe ser generado automaticamente. Aqui lo omitimos
+            //creamos una nueva sugerencia. El id debe ser generado automaticamente. Aqui lo omitimos
             //y empezamos por la propiedad name
             //como binding puede ser null
             binding?.let {
@@ -78,13 +86,13 @@ class AddFragment : Fragment() {
                 uploadImage(sugerencia?.id) { eventPost ->
                     //si la imagen fue subida correctamente
                     if (eventPost.isSuccess){
-                        if (sugerencia == null){//si el producto es null, lo creamos
+                        if (sugerencia == null){//si la sugerencia es null, la creamos
                             val sugerencia = Sugerencia(name = it.etNombreSuj.text.toString().trim(),
                                 description = it.etDescriptionSuj.text.toString().trim(),
                                 imgUrl = eventPost.photoUrl)
 
                             save(sugerencia, eventPost.documentId!!)
-                        }else{//si no es null, retomamos nuestro producto y le damos los nuevos valores,
+                        }else{//si no es null, retomamos nuestra sugerencia y le damos los nuevos valores,
                             //es decir, es una actualizacion
                             sugerencia?.apply {
                                 name = it.etNombreSuj.text.toString().trim()
@@ -117,13 +125,13 @@ class AddFragment : Fragment() {
     private fun uploadImage(sujerenciaId: String?, callback: (EventPost)->Unit){ //que retorna Unit sig que no retorna nada
         //creamos una nueva instancia de EventPost, la cual va a contener el documento
         val eventPost = EventPost()
-        //El sigo de Elvis, hace que en caso de que sea null, agarre el id del nuevo documento, sino
-        // que se quede con el id del producto actual.
-        //extraemos el id del document. Estamos reservando un lugar para que la imagen que subamos
+        //El signo de Elvis, hace que en caso de que sea null, agarre el id del nuevo documento, sino
+        // que se quede con el id de la sugerencia actual.
+        //Extraemos el id del document. Estamos reservando un lugar para que la imagen que subamos
         // tenga como nombre este id. Posteriormente, una vez que termine el proceso de subir vamos a
         // regresar ese documento para que la imagen que vayamos a subir sea asignada con el nombre
         // de este id y posteriormente, despues de que se suba nuestra imagen, ahora si, vamos a
-        // agarra el mismo document id para insertar un nuevo registro
+        // agarrar el mismo document id para insertar un nuevo registro
         eventPost.documentId = sujerenciaId ?: FirebaseFirestore.getInstance().collection(Constants.COLL_SUGGEST)
             .document().id
         //hacemos una instancia a la raiz del servidor
@@ -183,16 +191,12 @@ class AddFragment : Fragment() {
 
             }
             .addOnCompleteListener {
-                //una vez haya terminado el proceso de insercion, se habilitara
-                // el dialog, independientemente de si el proceso fue exitoso o no
-//                enableUI(true)
                 //Unicamente sera mostrado el progressbar cuando haya una subida en proceso, es decir,
                 //cuando se termine se ocultara
                 binding?.progressBar?.visibility = View.INVISIBLE
-                //cerrar el dialog fragment
-//                dismiss()
             }
     }
+
     override fun onDestroyView() {
         super.onDestroyView()
         //para poder desvincular binding
