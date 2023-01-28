@@ -1,5 +1,6 @@
 package com.pedroaguilar.amigodeviaje.detailsModule
 
+import android.R
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -11,6 +12,10 @@ class DetailsFragment : Fragment() {
 
     private lateinit var binding: FragmentDetailsBinding
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        //todo: poner en este fragment Theme.AmigoDeViaje.NoActionBar
+    }
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState:
     Bundle?): View? {
         binding = FragmentDetailsBinding.inflate(inflater, container, false)
@@ -19,7 +24,5 @@ class DetailsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        binding.tvDetails.text = "hola Peri"
     }
 }
