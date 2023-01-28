@@ -9,6 +9,7 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:background="?attr/colorSecondary"
+    android:paddingBottom="80dp"
     tools:context=".mainModule.HomeFragment">
 
     <TextView
