@@ -123,6 +123,7 @@ class MainActivity : AppCompatActivity() {
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
                 R.id.home_dest, R.id.profile_dest, R.id.settings_dest, R.id. favorite_dest-> showBottomNav()
+                R.id.details_dest -> hideBottomNav(hideToolbar = true)
                 else -> hideBottomNav()
             }
         }
@@ -132,12 +133,18 @@ class MainActivity : AppCompatActivity() {
         binding.bottomAppBar.visibility = View.VISIBLE
         binding.fab.visibility = View.VISIBLE
         binding.toolbar.navigationIcon = null
+        binding.toolbar.visibility = View.VISIBLE
     }
 
-    private fun hideBottomNav() {
+    private fun hideBottomNav(hideToolbar: Boolean = false) {
         binding.bottomAppBar.visibility = View.GONE
         binding.fab.visibility = View.GONE
-        binding.toolbar.setNavigationIcon(androidx.appcompat.R.drawable.abc_ic_ab_back_material)
+        if (hideToolbar){
+            binding.toolbar.visibility = View.GONE
+        } else {
+            binding.toolbar.setNavigationIcon(androidx.appcompat.R.drawable.abc_ic_ab_back_material)
+        }
+
     }
 
     override fun onResume() {
