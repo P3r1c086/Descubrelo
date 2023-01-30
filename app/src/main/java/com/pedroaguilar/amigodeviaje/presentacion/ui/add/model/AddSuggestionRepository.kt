@@ -1,4 +1,4 @@
-package com.pedroaguilar.amigodeviaje.addModule.model
+package com.pedroaguilar.amigodeviaje.presentacion.ui.add.model
 
 /**
  * Proyect: Amigo De Viaje
@@ -7,7 +7,7 @@ package com.pedroaguilar.amigodeviaje.addModule.model
  * More info: linkedin.com/in/pedro-aguilar-fernández-167753140
  * All rights reserved 2023
  **/
-class AddSuggestionInteractor {
+class AddSuggestionRepository {
 
 
 }

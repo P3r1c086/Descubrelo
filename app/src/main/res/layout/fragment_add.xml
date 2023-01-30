@@ -1,16 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <import type="com.pedroaguilar.amigodeviaje.common.entities.Sugerencia" />
+
+        <variable
+            name="loading"
+            type="boolean" />
+
+        <variable
+            name="sugerencia"
+            type="Sugerencia" />
+
+        <variable
+            name="error"
+            type="String" />
+    </data>
+
 <ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:background="?attr/colorSecondary"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:orientation="vertical"
-        tools:context=".addModule.AddFragment">
+        tools:context=".presentacion.ui.add.AddFragment">
 
         <TextView
             android:id="@+id/tvTitle"
@@ -20,64 +36,48 @@
             android:textSize="@dimen/size_title"
             android:textAlignment="center"
             android:textStyle="bold"
-            android:textColor="?attr/colorOnPrimary"
+            android:textColor="?attr/colorOnSecondary"
             android:layout_marginVertical="@dimen/common_padding_middle"/>
 
             <RadioGroup
                 android:id="@+id/rgSuggestion"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
                 <RadioButton
                     android:id="@+id/rbEat"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Comer"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toStartOf="@id/rbSleep"
-                    app:layout_constraintTop_toTopOf="parent"/>
+                    android:shadowColor="@color/black"
+                    android:text="Comer" />
                 <RadioButton
                     android:id="@+id/rbSleep"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Dormir"
-                    app:layout_constraintStart_toEndOf="@id/rbEat"
-                    app:layout_constraintEnd_toStartOf="@id/rbParty"
-                    app:layout_constraintTop_toTopOf="parent"/>
+                    android:text="Dormir" />
                 <RadioButton
                     android:id="@+id/rbParty"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Fiesta"
-                    app:layout_constraintStart_toEndOf="@id/rbSleep"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"/>
+                    android:text="Fiesta"/>
                 <RadioButton
                     android:id="@+id/rbTourism"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Turismo"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toStartOf="@id/rbAdventure"
-                    app:layout_constraintTop_toBottomOf="@id/rbEat"/>
+                    android:text="Turismo"/>
                 <RadioButton
                     android:id="@+id/rbAdventure"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Aventura"
-                    app:layout_constraintStart_toEndOf="@id/rbTourism"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/rbSleep"/>
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                    android:text="Aventura"/>
             </RadioGroup>
 
         <Spinner
-            android:id="@+id/spMotivoAusencia"
+            android:id="@+id/spTypeCategory"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAlignment="center"
+            android:spinnerMode="dropdown"
             android:layout_marginTop="@dimen/common_padding_default"
             android:layout_gravity="center"/>
 
@@ -172,3 +172,4 @@
             android:text="aceptar"/>
     </LinearLayout>
 </ScrollView>
+</layout>

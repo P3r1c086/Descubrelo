@@ -1,4 +1,4 @@
-package com.pedroaguilar.amigodeviaje.addModule
+package com.pedroaguilar.amigodeviaje.presentacion.ui.add
 
 import android.app.Activity
 import android.content.Intent
@@ -9,22 +9,30 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import android.widget.*
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
-import com.pedroaguilar.amigodeviaje.addModule.viewModel.AddSuggestionViewModel
+import com.pedroaguilar.amigodeviaje.R
 import com.pedroaguilar.amigodeviaje.common.Constants
+import com.pedroaguilar.amigodeviaje.common.Error.Connectivity
+import com.pedroaguilar.amigodeviaje.common.Error.Server
 import com.pedroaguilar.amigodeviaje.common.entities.EventPost
 import com.pedroaguilar.amigodeviaje.common.entities.Sugerencia
+import com.pedroaguilar.amigodeviaje.common.launchAndCollect
 import com.pedroaguilar.amigodeviaje.databinding.FragmentAddBinding
+import com.pedroaguilar.amigodeviaje.presentacion.ui.add.viewModel.AddSuggestionViewModel
 
 
-class AddFragment : Fragment() {
+class AddFragment : Fragment(), AdapterView.OnItemSelectedListener {
+
+    private val viewModel: AddSuggestionViewModel by viewModels()
 
     private var binding: FragmentAddBinding? = null
 
@@ -33,7 +41,9 @@ class AddFragment : Fragment() {
 
     //variables globales para cargar imagen en la imageView o subirlo a cloud Storage
     private var photoSelectedUri: Uri? = null
-
+    lateinit var typeCategory: String
+    //    val spinner: Spinner = findViewById(R.id.spTypeCategory)
+    private var result: Int = 0
     private val resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
         if (it.resultCode == Activity.RESULT_OK){
             photoSelectedUri = it.data?.data
@@ -68,15 +78,72 @@ class AddFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        //todo: Modificar tamaño container a match_parent
+        viewLifecycleOwner.launchAndCollect(viewModel.state) {
+            binding?.loading = it.loading
+            binding?.sugerencia = it.sugerencia
+            binding?.error = it.error?.let(::errorToString)
+        }
         configButtons()
         listener()
     }
 
+    private fun categoryRb(): String{
+        var category: String = "comer"
+        cargarSpinner()
+        binding?.rgSuggestion?.setOnCheckedChangeListener { _, checkedId ->
+            if (checkedId == 0){
+                category = "comer"
+                cargarSpinner()
+            }else if (checkedId == 1){
+                category = "dormir"
+                cargarSpinner()
+            }else if (checkedId == 2){
+                category = "fiesta"
+                cargarSpinner()
+            }else if (checkedId == 3){
+                category = "turismo"
+                cargarSpinner()
+            }else if (checkedId == 4){
+                category = "aventura"
+                cargarSpinner()
+            }
+        }
+        return category
+    }
 
+    private fun categoryRbId(): Int {
+
+        binding?.rgSuggestion?.setOnCheckedChangeListener{ _, checkedId ->
+            if (checkedId == 0){
+                result = R.array.sujerencias_comer
+            }else if (checkedId == 1){
+                result = R.array.sujerencias_dormir
+            }else if (checkedId == 2){
+                result = R.array.sujerencias_fiesta
+            }else if (checkedId == 3){
+                result = R.array.sujerencias_turismo
+            }else if(checkedId == 4){
+                result = R.array.sujerencias_aventura
+            }else{
+                result = R.array.sujerencias_vacia
+            }
+        }
+        return result
+    }
+
+    private fun cargarSpinner(){
+        // Create an ArrayAdapter using the string array and a default spinner layout
+        ArrayAdapter.createFromResource(
+            requireContext(), categoryRbId(), android.R.layout.simple_spinner_item
+        ).also { adapter ->
+            // Specify the layout to use when the list of choices appears
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            // Apply the adapter to the spinner
+            binding?.spTypeCategory?.adapter = adapter
+        }
+    }
 
     private fun listener() {
-
         binding?.btnAceptar?.setOnClickListener {
             //creamos una nueva sugerencia. El id debe ser generado automaticamente. Aqui lo omitimos
             //y empezamos por la propiedad name
@@ -87,10 +154,23 @@ class AddFragment : Fragment() {
                     //si la imagen fue subida correctamente
                     if (eventPost.isSuccess){
                         if (sugerencia == null){//si la sugerencia es null, la creamos
-                            val sugerencia = Sugerencia(name = it.etNombreSuj.text.toString().trim(),
+                            val sugerencia = Sugerencia(
+                                category = categoryRb(),
+                                typeCategory = typeCategory,
+                                name = it.etNombreSuj.text.toString().trim(),
                                 description = it.etDescriptionSuj.text.toString().trim(),
                                 imgUrl = eventPost.photoUrl)
-
+                            //subir sugerencia a real time db
+                            FirebaseAuth.getInstance().uid?.let { id ->
+                                FirebaseAuth.getInstance().currentUser?.displayName?.let { name ->
+                                    viewModel.registrarSugerenciaEnFirebaseDatabase(id,
+                                        categoryRb(),
+                                        typeCategory,
+                                        it.etNombreSuj.text.toString().trim(),
+                                        it.etDescriptionSuj.text.toString().trim(),
+                                        eventPost.photoUrl)
+                                }
+                            }
                             save(sugerencia, eventPost.documentId!!)
                         }else{//si no es null, retomamos nuestra sugerencia y le damos los nuevos valores,
                             //es decir, es una actualizacion
@@ -182,7 +262,6 @@ class AddFragment : Fragment() {
             //le seteamos el id de forma manual
             .document(documentId)
             .set(sugerencia)
-//            .add(product)
             .addOnSuccessListener {
                 Toast.makeText(activity, "Sujerencia añadida.", Toast.LENGTH_SHORT).show()
             }
@@ -201,5 +280,20 @@ class AddFragment : Fragment() {
         super.onDestroyView()
         //para poder desvincular binding
         binding = null
+    }
+
+    private fun errorToString(error: com.pedroaguilar.amigodeviaje.common.Error) = when (error) {
+        Connectivity -> requireContext().getString(R.string.connectivity_error)
+        is Server -> requireContext().getString(R.string.server_error) + error.code
+        else -> requireContext().getString(R.string.unknown_error)
+    }
+
+    override fun onItemSelected(parent: AdapterView<*>, view: View?, pos: Int, id: Long) {
+        // An item was selected. You can retrieve the selected item using
+        typeCategory = parent.getItemAtPosition(pos).toString()
+    }
+
+    override fun onNothingSelected(parent: AdapterView<*>) {
+        // Another interface callback
     }
 }

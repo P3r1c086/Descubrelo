@@ -64,4 +64,7 @@
         <item>Escalada</item>
         <item>Puenting</item>
     </string-array>
+    <string-array name="sujerencias_vacia">
+        <item>No hay opciones</item>
+    </string-array>
 </resources>

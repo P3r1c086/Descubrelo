@@ -3,6 +3,7 @@ package com.pedroaguilar.amigodeviaje.servicios
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
+import com.pedroaguilar.amigodeviaje.common.entities.Sugerencia
 import com.pedroaguilar.amigodeviaje.common.entities.Usuario
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume
@@ -14,6 +15,8 @@ class ServicioFirebaseDatabase {
     private val firebaseAuth = FirebaseAuth.getInstance()
     private val databaseReferenceUsuarios: DatabaseReference =
         FirebaseDatabase.getInstance().getReference(Constantes.NODO_USUARIOS)
+    private val databaseReferenceSugerencias: DatabaseReference =
+        FirebaseDatabase.getInstance().getReference(Constantes.NODO_SUGERENCIAS)
 
     //Zona Usuario
     /**
@@ -43,5 +46,18 @@ class ServicioFirebaseDatabase {
                         continuation.resume(null)
                     }
                 }
+        }
+    //Zona Sugerencia
+    suspend fun registrarSugerencia(firebaseAuthUsuarioId: String, sugerencia: Sugerencia): Sugerencia? =
+        suspendCancellableCoroutine { continuation ->
+        databaseReferenceSugerencias
+            .child(firebaseAuthUsuarioId).setValue(sugerencia).addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    continuation.resume(sugerencia)
+                } else {
+                    continuation.resume(null)
+                }
+            }
+
         }
 }

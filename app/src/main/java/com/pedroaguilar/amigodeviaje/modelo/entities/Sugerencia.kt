@@ -11,6 +11,8 @@ import com.google.firebase.firestore.Exclude
  **/
 data class Sugerencia(
     @get:Exclude var id: String? = null,
+    var category: String? = null,
+    var typeCategory: String? = null,
     var name: String? = null,
     var description: String? = null,
     var imgUrl: String? = null){
