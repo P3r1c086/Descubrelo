@@ -1,4 +1,4 @@
-package com.pedroaguilar.amigodeviaje.settingsModule
+package com.pedroaguilar.amigodeviaje.presentacion.ui.settings
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

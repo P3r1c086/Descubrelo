@@ -1,4 +1,4 @@
-package com.pedroaguilar.amigodeviaje
+package com.pedroaguilar.amigodeviaje.presentacion.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -19,7 +19,8 @@ class MainViewModel : ViewModel() {
 
     fun registrarUsuarioEnFirebaseDatabase(uidUser: String, nombre: String) {
         viewModelScope.launch {
-            val usuarioRecienRegistrado = firebaseDatabase.registrarUsuarioEnBdPropia(uidUser, Usuario(uidUser, nombre))
+            val usuarioRecienRegistrado = firebaseDatabase.registrarUsuarioEnBdPropia(uidUser,
+                Usuario(uidUser, nombre))
             if (usuarioRecienRegistrado != null) {
                 _state.update {
                     _state.value.copy(

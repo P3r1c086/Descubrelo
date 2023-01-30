@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?attr/colorSecondary"
-    tools:context=".favoriteModule.FavoriteFragment">
+    tools:context=".presentacion.ui.favorite.FavoriteFragment">
 
     <TextView
         android:id="@+id/tvFavorite"

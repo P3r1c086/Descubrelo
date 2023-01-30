@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?attr/colorSecondary"
-    tools:context=".profileModule.ProfileFragment">
+    tools:context=".presentacion.ui.profile.ProfileFragment">
 
     <TextView
         android:id="@+id/tvSignOut"

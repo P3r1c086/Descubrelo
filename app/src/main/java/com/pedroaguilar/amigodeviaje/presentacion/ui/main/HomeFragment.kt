@@ -1,4 +1,4 @@
-package com.pedroaguilar.amigodeviaje.mainModule
+package com.pedroaguilar.amigodeviaje.presentacion.ui.main
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.NavHostFragment
-import com.pedroaguilar.amigodeviaje.MainActivity
+import com.pedroaguilar.amigodeviaje.presentacion.ui.MainActivity
 import com.pedroaguilar.amigodeviaje.R
 import com.pedroaguilar.amigodeviaje.databinding.FragmentHomeBinding
 import org.imaginativeworld.whynotimagecarousel.listener.CarouselListener

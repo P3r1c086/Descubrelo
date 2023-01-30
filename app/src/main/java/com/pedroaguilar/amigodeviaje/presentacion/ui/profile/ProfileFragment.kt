@@ -1,4 +1,4 @@
-package com.pedroaguilar.amigodeviaje.profileModule
+package com.pedroaguilar.amigodeviaje.presentacion.ui.profile
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

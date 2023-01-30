@@ -1,4 +1,4 @@
-package com.pedroaguilar.amigodeviaje
+package com.pedroaguilar.amigodeviaje.presentacion.ui
 
 
 import android.os.Bundle
@@ -18,6 +18,7 @@ import com.firebase.ui.auth.ErrorCodes
 import com.firebase.ui.auth.IdpResponse
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuth.AuthStateListener
+import com.pedroaguilar.amigodeviaje.R
 import com.pedroaguilar.amigodeviaje.common.Error.Connectivity
 import com.pedroaguilar.amigodeviaje.common.Error.Server
 import com.pedroaguilar.amigodeviaje.common.launchAndCollect
@@ -99,9 +100,6 @@ class MainActivity : AppCompatActivity() {
                         viewModel.registrarUsuarioEnFirebaseDatabase(id, name)
                     }
                 }
-                //supportActionBar?.title = auth.currentUser?.displayName
-                //oculto el spinner
-                //binding.llProgress.visibility = View.GONE
             }else{//si no existe el usuario
                 //Autenticar desde Firebase
                 val providers = arrayListOf(
@@ -137,7 +135,7 @@ class MainActivity : AppCompatActivity() {
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
-                R.id.home_dest, R.id.profile_dest, R.id.settings_dest, R.id. favorite_dest-> showBottomNav()
+                R.id.home_dest, R.id.profile_dest, R.id.settings_dest, R.id.favorite_dest -> showBottomNav()
                 R.id.details_dest -> hideBottomNav(hideToolbar = true)
                 else -> hideBottomNav()
             }

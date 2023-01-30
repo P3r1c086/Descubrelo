@@ -1,4 +1,4 @@
-package com.pedroaguilar.amigodeviaje.favoriteModule
+package com.pedroaguilar.amigodeviaje.presentacion.ui.favorite
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

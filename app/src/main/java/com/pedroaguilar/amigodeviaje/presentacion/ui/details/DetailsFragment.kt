@@ -1,4 +1,4 @@
-package com.pedroaguilar.amigodeviaje.detailsModule
+package com.pedroaguilar.amigodeviaje.presentacion.ui.details
 
 import android.os.Bundle
 import android.view.LayoutInflater
