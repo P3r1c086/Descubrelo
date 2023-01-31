@@ -17,6 +17,7 @@
         <variable
             name="error"
             type="String" />
+
     </data>
 
 <ScrollView
@@ -165,9 +166,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/common_padding_middle"
-            android:layout_marginBottom="@dimen/common_padding_middle"
+            android:layout_marginBottom="156dp"
             android:layout_gravity="center"
-            android:text="aceptar"/>
+            android:text="aceptar"
+            app:enabled="@{}"/>
     </LinearLayout>
 </ScrollView>
 </layout>

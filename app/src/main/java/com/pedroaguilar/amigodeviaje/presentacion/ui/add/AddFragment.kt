@@ -29,21 +29,21 @@ import com.pedroaguilar.amigodeviaje.common.entities.EventPost
 import com.pedroaguilar.amigodeviaje.common.entities.Sugerencia
 import com.pedroaguilar.amigodeviaje.common.launchAndCollect
 import com.pedroaguilar.amigodeviaje.databinding.FragmentAddBinding
-import com.pedroaguilar.amigodeviaje.presentacion.ui.add.viewModel.AddSuggestionViewModel
+import com.pedroaguilar.amigodeviaje.presentacion.ui.add.viewModel.AddFragmentViewModel
 
 
 class AddFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
-    private val viewModel: AddSuggestionViewModel by viewModels()
+    private val viewModel: AddFragmentViewModel by viewModels()
 
     private var binding: FragmentAddBinding? = null
 
     private var sugerencia: Sugerencia? = null
-    private lateinit var addSuggestionViewModel: AddSuggestionViewModel
+    private lateinit var addFragmentViewModel: AddFragmentViewModel
 
     //variables globales para cargar imagen en la imageView o subirlo a cloud Storage
     private var photoSelectedUri: Uri? = null
-    lateinit var typeCategory: String
+    private var typeCategory: String? = null
     private var category = "comer"
     private val resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
         if (it.resultCode == Activity.RESULT_OK){
@@ -68,7 +68,7 @@ class AddFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        addSuggestionViewModel = ViewModelProvider(requireActivity())[AddSuggestionViewModel::class.java]
+        addFragmentViewModel = ViewModelProvider(requireActivity())[AddFragmentViewModel::class.java]
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -90,7 +90,7 @@ class AddFragment : Fragment(), AdapterView.OnItemSelectedListener {
     }
 
     private fun spinnerListener(): String{
-        binding?.rgSuggestion?.setOnCheckedChangeListener { radioGroup, i ->
+        binding?.rgSuggestion?.setOnCheckedChangeListener { _, _ ->
             when {
                 binding?.rbEat?.isChecked == true -> {
                     cargarSpinner(R.array.sujerencias_comer)
@@ -98,19 +98,19 @@ class AddFragment : Fragment(), AdapterView.OnItemSelectedListener {
                 }
                 binding?.rbSleep?.isChecked == true -> {
                     cargarSpinner(R.array.sujerencias_dormir)
-                    category = "comer"
+                    category = "dormir"
                 }
                 binding?.rbParty?.isChecked == true -> {
                     cargarSpinner(R.array.sujerencias_fiesta)
-                    category = "comer"
+                    category = "fiesta"
                 }
                 binding?.rbTourism?.isChecked == true -> {
                     cargarSpinner(R.array.sujerencias_turismo)
-                    category = "comer"
+                    category = "turismo"
                 }
                 binding?.rbAdventure?.isChecked == true -> {
                     cargarSpinner(R.array.sujerencias_aventura)
-                    category = "comer"
+                    category = "aventura"
                 }
                 else -> category = "vacia"
             }
@@ -131,6 +131,16 @@ class AddFragment : Fragment(), AdapterView.OnItemSelectedListener {
     }
 
     private fun listener() {
+        binding?.spTypeCategory?.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+
+            }
+
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                typeCategory = parent?.getItemAtPosition(position).toString()
+            }
+
+        }
         binding?.btnAceptar?.setOnClickListener {
             //creamos una nueva sugerencia. El id debe ser generado automaticamente. Aqui lo omitimos
             //y empezamos por la propiedad name
@@ -147,17 +157,18 @@ class AddFragment : Fragment(), AdapterView.OnItemSelectedListener {
                                 name = it.etNombreSuj.text.toString().trim(),
                                 description = it.etDescriptionSuj.text.toString().trim(),
                                 imgUrl = eventPost.photoUrl)
-                            //subir sugerencia a real time db
-                            FirebaseAuth.getInstance().uid?.let { id ->
-                                FirebaseAuth.getInstance().currentUser?.displayName?.let { name ->
-                                    viewModel.registrarSugerenciaEnFirebaseDatabase(id,
-                                        category,
-                                        typeCategory,
-                                        it.etNombreSuj.text.toString().trim(),
-                                        it.etDescriptionSuj.text.toString().trim(),
-                                        eventPost.photoUrl)
-                                }
-                            }
+//                            //subir sugerencia a Firestore
+//                            FirebaseAuth.getInstance().uid?.let { id ->
+//                                FirebaseAuth.getInstance().currentUser?.displayName?.let { name ->
+//                                    viewModel.registrarSugerenciaEnFirestore(
+//                                        id,
+//                                        category,
+//                                        typeCategory,
+//                                        it.etNombreSuj.text.toString().trim(),
+//                                        it.etDescriptionSuj.text.toString().trim(),
+//                                        eventPost.photoUrl)
+//                                }
+//                            }
                             save(sugerencia, eventPost.documentId!!)
                         }else{//si no es null, retomamos nuestra sugerencia y le damos los nuevos valores,
                             //es decir, es una actualizacion
@@ -243,24 +254,37 @@ class AddFragment : Fragment(), AdapterView.OnItemSelectedListener {
     }
 
     private fun save(sugerencia: Sugerencia, documentId: String){
-        //creamos una instancia de la base de datos de Firestore
-        val db = FirebaseFirestore.getInstance()
-        db.collection(Constants.COLL_SUGGEST)
-            //le seteamos el id de forma manual
-            .document(documentId)
-            .set(sugerencia)
-            .addOnSuccessListener {
-                Toast.makeText(activity, "Sujerencia añadida.", Toast.LENGTH_SHORT).show()
+        //subir sugerencia a Firestore
+        FirebaseAuth.getInstance().uid?.let { id ->
+            FirebaseAuth.getInstance().currentUser?.displayName?.let { name ->
+                    viewModel.registrarSugerenciaEnFirestore(
+                        id,
+                        sugerencia.category!!,
+                        sugerencia.typeCategory!!,
+                        sugerencia.name!!,
+                        sugerencia.description!!,
+                        sugerencia.imgUrl!!)
             }
-            .addOnFailureListener {
-                Toast.makeText(activity, "Error al insertar.", Toast.LENGTH_SHORT).show()
-
-            }
-            .addOnCompleteListener {
-                //Unicamente sera mostrado el progressbar cuando haya una subida en proceso, es decir,
-                //cuando se termine se ocultara
-                binding?.progressBar?.visibility = View.INVISIBLE
-            }
+        }
+//        //creamos una instancia de la base de datos de Firestore
+//        val db = FirebaseFirestore.getInstance()
+//        db.collection(Constants.COLL_SUGGEST)
+//            //le seteamos el id de forma manual
+//            .document(documentId)
+//            .set(sugerencia)
+//            .addOnSuccessListener {
+//                Toast.makeText(activity, "Sujerencia añadida.", Toast.LENGTH_SHORT).show()
+//            }
+//            .addOnFailureListener {
+//                Toast.makeText(activity, "Error al insertar.", Toast.LENGTH_SHORT).show()
+//
+//            }
+//            .addOnCompleteListener {
+//                //Unicamente sera mostrado el progressbar cuando haya una subida en proceso, es decir,
+//                //cuando se termine se ocultara
+//                //todo:hacer que sea visible o no con el loading del xml
+//                binding?.progressBar?.visibility = View.INVISIBLE
+//            }
     }
 
     override fun onDestroyView() {
@@ -269,18 +293,26 @@ class AddFragment : Fragment(), AdapterView.OnItemSelectedListener {
         binding = null
     }
 
+    override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+        typeCategory = parent?.getItemAtPosition(position).toString()
+    }
+
+    override fun onNothingSelected(parent: AdapterView<*>?) {
+        TODO("Not yet implemented")
+    }
+
+//    fun onItemSelectedListener(parent: AdapterView<*>, view: View?, pos: Int, id: Long) {
+//        // An item was selected. You can retrieve the selected item using
+//        typeCategory = parent.getItemAtPosition(pos).toString()
+//    }
+//
+//    override fun onNothingSelected(parent: AdapterView<*>) {
+//        // Another interface callback
+//    }
     private fun errorToString(error: com.pedroaguilar.amigodeviaje.common.Error) = when (error) {
         Connectivity -> requireContext().getString(R.string.connectivity_error)
         is Server -> requireContext().getString(R.string.server_error) + error.code
         else -> requireContext().getString(R.string.unknown_error)
     }
 
-    override fun onItemSelected(parent: AdapterView<*>, view: View?, pos: Int, id: Long) {
-        // An item was selected. You can retrieve the selected item using
-        typeCategory = parent.getItemAtPosition(pos).toString()
-    }
-
-    override fun onNothingSelected(parent: AdapterView<*>) {
-        // Another interface callback
-    }
 }

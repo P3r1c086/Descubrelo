@@ -1,5 +1,6 @@
 package com.pedroaguilar.amigodeviaje.presentacion.ui.add.viewModel
 
+import android.widget.Button
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.pedroaguilar.amigodeviaje.common.Error
@@ -17,13 +18,13 @@ import kotlinx.coroutines.launch
  * More info: linkedin.com/in/pedro-aguilar-fernández-167753140
  * All rights reserved 2023
  **/
-class AddSuggestionViewModel: ViewModel() {
+class AddFragmentViewModel: ViewModel() {
     private val _state = MutableStateFlow(UiState(loading = true))
     val state = _state.asStateFlow()
 
     private val firebaseDatabase: ServicioFirebaseDatabase = ServicioFirebaseDatabase()
 
-    fun registrarSugerenciaEnFirebaseDatabase(uidUser: String, category: String, typeCategory: String,
+    fun registrarSugerenciaEnFirestore(uidUser: String, category: String, typeCategory: String,
                                               nombre: String, descripcion: String,
                                               imgUrl: String){
         viewModelScope.launch {
