@@ -9,7 +9,9 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -42,13 +44,12 @@ class AddFragment : Fragment(), AdapterView.OnItemSelectedListener {
     //variables globales para cargar imagen en la imageView o subirlo a cloud Storage
     private var photoSelectedUri: Uri? = null
     lateinit var typeCategory: String
-    //    val spinner: Spinner = findViewById(R.id.spTypeCategory)
-    private var result: Int = 0
+    private var category = "comer"
     private val resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
         if (it.resultCode == Activity.RESULT_OK){
             photoSelectedUri = it.data?.data
 
-            // binding?.imgProductPreview?.setImageURI(photoSelectedUri)
+            // binding.imgProductPreview?.setImageURI(photoSelectedUri)
 
             //Glide tb puede cargar una imagen que venga localmente
             binding?.let {
@@ -85,56 +86,42 @@ class AddFragment : Fragment(), AdapterView.OnItemSelectedListener {
         }
         configButtons()
         listener()
+        spinnerListener()
     }
 
-    private fun categoryRb(): String{
-        var category: String = "comer"
-        cargarSpinner()
-        binding?.rgSuggestion?.setOnCheckedChangeListener { _, checkedId ->
-            if (checkedId == 0){
-                category = "comer"
-                cargarSpinner()
-            }else if (checkedId == 1){
-                category = "dormir"
-                cargarSpinner()
-            }else if (checkedId == 2){
-                category = "fiesta"
-                cargarSpinner()
-            }else if (checkedId == 3){
-                category = "turismo"
-                cargarSpinner()
-            }else if (checkedId == 4){
-                category = "aventura"
-                cargarSpinner()
+    private fun spinnerListener(): String{
+        binding?.rgSuggestion?.setOnCheckedChangeListener { radioGroup, i ->
+            when {
+                binding?.rbEat?.isChecked == true -> {
+                    cargarSpinner(R.array.sujerencias_comer)
+                    category = "comer"
+                }
+                binding?.rbSleep?.isChecked == true -> {
+                    cargarSpinner(R.array.sujerencias_dormir)
+                    category = "comer"
+                }
+                binding?.rbParty?.isChecked == true -> {
+                    cargarSpinner(R.array.sujerencias_fiesta)
+                    category = "comer"
+                }
+                binding?.rbTourism?.isChecked == true -> {
+                    cargarSpinner(R.array.sujerencias_turismo)
+                    category = "comer"
+                }
+                binding?.rbAdventure?.isChecked == true -> {
+                    cargarSpinner(R.array.sujerencias_aventura)
+                    category = "comer"
+                }
+                else -> category = "vacia"
             }
         }
         return category
     }
 
-    private fun categoryRbId(): Int {
-
-        binding?.rgSuggestion?.setOnCheckedChangeListener{ _, checkedId ->
-            if (checkedId == 0){
-                result = R.array.sujerencias_comer
-            }else if (checkedId == 1){
-                result = R.array.sujerencias_dormir
-            }else if (checkedId == 2){
-                result = R.array.sujerencias_fiesta
-            }else if (checkedId == 3){
-                result = R.array.sujerencias_turismo
-            }else if(checkedId == 4){
-                result = R.array.sujerencias_aventura
-            }else{
-                result = R.array.sujerencias_vacia
-            }
-        }
-        return result
-    }
-
-    private fun cargarSpinner(){
+    private fun cargarSpinner(arrayRes: Int){
         // Create an ArrayAdapter using the string array and a default spinner layout
         ArrayAdapter.createFromResource(
-            requireContext(), categoryRbId(), android.R.layout.simple_spinner_item
+            requireContext(), arrayRes, android.R.layout.simple_spinner_item
         ).also { adapter ->
             // Specify the layout to use when the list of choices appears
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
@@ -155,7 +142,7 @@ class AddFragment : Fragment(), AdapterView.OnItemSelectedListener {
                     if (eventPost.isSuccess){
                         if (sugerencia == null){//si la sugerencia es null, la creamos
                             val sugerencia = Sugerencia(
-                                category = categoryRb(),
+                                category = category,
                                 typeCategory = typeCategory,
                                 name = it.etNombreSuj.text.toString().trim(),
                                 description = it.etDescriptionSuj.text.toString().trim(),
@@ -164,7 +151,7 @@ class AddFragment : Fragment(), AdapterView.OnItemSelectedListener {
                             FirebaseAuth.getInstance().uid?.let { id ->
                                 FirebaseAuth.getInstance().currentUser?.displayName?.let { name ->
                                     viewModel.registrarSugerenciaEnFirebaseDatabase(id,
-                                        categoryRb(),
+                                        category,
                                         typeCategory,
                                         it.etNombreSuj.text.toString().trim(),
                                         it.etDescriptionSuj.text.toString().trim(),
