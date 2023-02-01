@@ -12,7 +12,7 @@ fun ImageView.loadUrl(url: String) {
 
 fun <T> Lifecycle.launchAndCollect(
     flow: Flow<T>,
-    state: Lifecycle.State = Lifecycle.State.STARTED,
+    state: Lifecycle.State = Lifecycle.State.CREATED,
     body: (T) -> Unit
 ) {
     coroutineScope.launch {
@@ -24,7 +24,7 @@ fun <T> Lifecycle.launchAndCollect(
 
 fun <T> LifecycleOwner.launchAndCollect(
     flow: Flow<T>,
-    state: Lifecycle.State = Lifecycle.State.STARTED,
+    state: Lifecycle.State = Lifecycle.State.CREATED,
     body: (T) -> Unit
 ) {
     lifecycleScope.launch {
