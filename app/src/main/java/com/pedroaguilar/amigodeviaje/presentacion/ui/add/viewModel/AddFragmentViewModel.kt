@@ -17,6 +17,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
+
 /**
  * Proyect: Amigo De Viaje
  * From: com.pedroaguilar.amigodeviaje.addModule.viewModel
@@ -120,12 +121,11 @@ class AddFragmentViewModel: ViewModel() {
             //comenzamos a subir la imagen. uri es photoSelectedUri
             photoRef.putFile(uri.toUri())
                 //para la barra de progreso al subir la foto
-                .addOnProgressListener {
-                    //con esto obtenemos los bytes tranferidos respecto al total
-                    val progress = (100 * it.bytesTransferred / it.totalByteCount).toInt()
-                    it.run { _state.update { _state.value.copy(progressLoading = progress) } }
-                }
-                .addOnSuccessListener {
+                .addOnProgressListener { taskSnapshot ->
+                    val progress = (100.0 * taskSnapshot.bytesTransferred) / taskSnapshot.totalByteCount
+                    val currentprogress = progress.toInt()
+                    _state.update { _state.value.copy(progressLoading = currentprogress) }
+                }.addOnSuccessListener {
                     //extraemos la url para descargar
                     it.storage.downloadUrl.addOnSuccessListener { downloadUrl ->
                         Log.i("URL", downloadUrl.toString())

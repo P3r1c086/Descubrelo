@@ -9,8 +9,12 @@
             type="boolean" />
 
         <variable
-            name="progressLoading"
+            name="progressText"
             type="String" />
+
+        <variable
+            name="progressLoading"
+            type="Integer" />
 
         <variable
             name="error"
@@ -152,6 +156,8 @@
             android:layout_height="wrap_content"
             android:visibility="gone"
             android:layout_marginHorizontal="78dp"
+            app:visible="@{loading}"
+            app:setInt="@{progressLoading}"
             tools:visibility="visible"
             tools:progress="75" />
         <com.google.android.material.textview.MaterialTextView
@@ -160,7 +166,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/common_padding_min"
             android:gravity="center"
-            android:text="@{progressLoading}"
+            android:text="@{progressText}"
             tools:text="Subiendo...75%" />
 
         <Button

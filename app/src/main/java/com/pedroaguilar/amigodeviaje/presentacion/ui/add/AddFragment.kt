@@ -46,13 +46,18 @@ class AddFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         viewLifecycleOwner.launchAndCollect(viewModel.state) {
             binding.loading = it.loading
-            binding.progressLoading = String.format("%s%%", it.progressLoading)
+            binding.progressLoading = it.progressLoading
+            binding.progressText = if (!it.sugerenciaSubidaCorrectamente) {
+                String.format("%s%%", it.progressLoading)
+            } else {
+                "Sugerencia subida con éxito!"
+            }
             binding.error = it.error?.let(::errorToString)
             binding.habilitarAceptar = !it.category.isNullOrBlank()
                         && !it.typeCategory.isNullOrBlank()
                     && !it.nombre.isNullOrBlank()
                     && !it.descripcion.isNullOrBlank()
-            //Aqui se puede añadir que si la url no es null, pero lo mismo quieres que se pueda subir una sugerencia sin imagen
+                    && !it.photoSelectedUri.isNullOrBlank()
         }
         configButtons()
         listener()

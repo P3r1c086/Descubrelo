@@ -1,10 +1,10 @@
-package com.pedroaguilar.amigodeviaje.common
+package com.pedroaguilar.amigodeviaje.modelo
 
 import android.view.View
 import android.widget.Button
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter
-import com.pedroaguilar.amigodeviaje.modelo.loadUrl
+import com.google.android.material.progressindicator.LinearProgressIndicator
 
 @BindingAdapter("url")
 fun ImageView.bindUrl(url: String?) {
@@ -20,3 +20,7 @@ fun Button.enabled(enabled: Boolean?) {
     if (enabled == true) Button.VISIBLE else Button.INVISIBLE
 }
 
+@BindingAdapter("setInt")
+fun LinearProgressIndicator.setInt(value: Int) {
+    progress = value
+}
