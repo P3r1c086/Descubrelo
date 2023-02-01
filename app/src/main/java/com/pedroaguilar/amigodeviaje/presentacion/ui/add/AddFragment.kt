@@ -2,120 +2,88 @@ package com.pedroaguilar.amigodeviaje.presentacion.ui.add
 
 import android.app.Activity
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
-import android.util.Log
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.storage.FirebaseStorage
 import com.pedroaguilar.amigodeviaje.R
-import com.pedroaguilar.amigodeviaje.common.Constants
 import com.pedroaguilar.amigodeviaje.common.Error.Connectivity
 import com.pedroaguilar.amigodeviaje.common.Error.Server
-import com.pedroaguilar.amigodeviaje.common.entities.EventPost
-import com.pedroaguilar.amigodeviaje.common.entities.Sugerencia
-import com.pedroaguilar.amigodeviaje.common.launchAndCollect
 import com.pedroaguilar.amigodeviaje.databinding.FragmentAddBinding
+import com.pedroaguilar.amigodeviaje.modelo.launchAndCollect
+import com.pedroaguilar.amigodeviaje.modelo.loadUrl
 import com.pedroaguilar.amigodeviaje.presentacion.ui.add.viewModel.AddFragmentViewModel
 
 
-class AddFragment : Fragment(), AdapterView.OnItemSelectedListener {
+class AddFragment : Fragment() {
 
     private val viewModel: AddFragmentViewModel by viewModels()
 
-    private var binding: FragmentAddBinding? = null
+    private lateinit var binding: FragmentAddBinding
 
-    private var sugerencia: Sugerencia? = null
-    private lateinit var addFragmentViewModel: AddFragmentViewModel
-
-    //variables globales para cargar imagen en la imageView o subirlo a cloud Storage
-    private var photoSelectedUri: Uri? = null
-    private var typeCategory: String? = null
-    private var category = "comer"
     private val resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
         if (it.resultCode == Activity.RESULT_OK){
-            photoSelectedUri = it.data?.data
-
-            // binding.imgProductPreview?.setImageURI(photoSelectedUri)
-
-            //Glide tb puede cargar una imagen que venga localmente
-            binding?.let {
-                //cargar imagen
-                Glide.with(this)
-                    .load(photoSelectedUri)
-                    //este es para que almacene la imagen descargada, para que no tenga que estar
-                    // consultando cada vez que inicie la app. Tiene la desventaja que hasta que no cambie
-                    // la url, la imagen va a ser la misma sin importar que el servidor si cambie
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    .centerCrop()
-                    .into(it.imgSuggestionPreview)
-            }
+            viewModel.setImageUrl(it.data?.data.toString())
+            binding.imgSuggestionPreview.loadUrl(it.data?.data.toString())
         }
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        addFragmentViewModel = ViewModelProvider(requireActivity())[AddFragmentViewModel::class.java]
-    }
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentAddBinding.inflate(inflater, container, false)
-        return binding?.root
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewLifecycleOwner.launchAndCollect(viewModel.state) {
-            binding?.loading = it.loading
-            binding?.sugerencia = it.sugerencia
-            binding?.error = it.error?.let(::errorToString)
+            binding.loading = it.loading
+            binding.progressLoading = String.format("%s%%", it.progressLoading)
+            binding.error = it.error?.let(::errorToString)
+            binding.habilitarAceptar = !it.category.isNullOrBlank()
+                        && !it.typeCategory.isNullOrBlank()
+                    && !it.nombre.isNullOrBlank()
+                    && !it.descripcion.isNullOrBlank()
+            //Aqui se puede añadir que si la url no es null, pero lo mismo quieres que se pueda subir una sugerencia sin imagen
         }
         configButtons()
         listener()
         spinnerListener()
     }
 
-    private fun spinnerListener(): String{
-        binding?.rgSuggestion?.setOnCheckedChangeListener { _, _ ->
+    private fun spinnerListener(){
+        binding.rgSuggestion.setOnCheckedChangeListener { _, _ ->
             when {
-                binding?.rbEat?.isChecked == true -> {
+                binding.rbEat.isChecked -> {
+                    viewModel.setCategory("comer")
                     cargarSpinner(R.array.sujerencias_comer)
-                    category = "comer"
                 }
-                binding?.rbSleep?.isChecked == true -> {
+                binding.rbSleep.isChecked -> {
+                    viewModel.setCategory("dormir")
                     cargarSpinner(R.array.sujerencias_dormir)
-                    category = "dormir"
                 }
-                binding?.rbParty?.isChecked == true -> {
+                binding.rbParty.isChecked -> {
+                    viewModel.setCategory("fiesta")
                     cargarSpinner(R.array.sujerencias_fiesta)
-                    category = "fiesta"
                 }
-                binding?.rbTourism?.isChecked == true -> {
+                binding.rbTourism.isChecked -> {
+                    viewModel.setCategory("turismo")
                     cargarSpinner(R.array.sujerencias_turismo)
-                    category = "turismo"
                 }
-                binding?.rbAdventure?.isChecked == true -> {
+                binding.rbAdventure.isChecked -> {
+                    viewModel.setCategory("aventura")
                     cargarSpinner(R.array.sujerencias_aventura)
-                    category = "aventura"
                 }
-                else -> category = "vacia"
             }
         }
-        return category
     }
 
     private fun cargarSpinner(arrayRes: Int){
@@ -126,70 +94,40 @@ class AddFragment : Fragment(), AdapterView.OnItemSelectedListener {
             // Specify the layout to use when the list of choices appears
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             // Apply the adapter to the spinner
-            binding?.spTypeCategory?.adapter = adapter
+            binding.spTypeCategory.adapter = adapter
         }
     }
 
     private fun listener() {
-        binding?.spTypeCategory?.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
-            override fun onNothingSelected(parent: AdapterView<*>?) {
+        binding.etNombreSuj.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) { viewModel.setName(s.toString())}
 
-            }
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+        })
+
+        binding.etDescriptionSuj.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) { viewModel.setDescription(s.toString())}
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+        })
+
+        binding.spTypeCategory.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+            override fun onNothingSelected(parent: AdapterView<*>?) = Unit
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                typeCategory = parent?.getItemAtPosition(position).toString()
+                viewModel.setTypeCategory(parent?.getItemAtPosition(position).toString())
             }
-
         }
-        binding?.btnAceptar?.setOnClickListener {
-            //creamos una nueva sugerencia. El id debe ser generado automaticamente. Aqui lo omitimos
-            //y empezamos por la propiedad name
-            //como binding puede ser null
-            binding?.let {
-                //subir imagen al storage. Recibe un callBack
-                uploadImage(sugerencia?.id) { eventPost ->
-                    //si la imagen fue subida correctamente
-                    if (eventPost.isSuccess){
-                        if (sugerencia == null){//si la sugerencia es null, la creamos
-                            val sugerencia = Sugerencia(
-                                category = category,
-                                typeCategory = typeCategory,
-                                name = it.etNombreSuj.text.toString().trim(),
-                                description = it.etDescriptionSuj.text.toString().trim(),
-                                imgUrl = eventPost.photoUrl)
-//                            //subir sugerencia a Firestore
-//                            FirebaseAuth.getInstance().uid?.let { id ->
-//                                FirebaseAuth.getInstance().currentUser?.displayName?.let { name ->
-//                                    viewModel.registrarSugerenciaEnFirestore(
-//                                        id,
-//                                        category,
-//                                        typeCategory,
-//                                        it.etNombreSuj.text.toString().trim(),
-//                                        it.etDescriptionSuj.text.toString().trim(),
-//                                        eventPost.photoUrl)
-//                                }
-//                            }
-                            save(sugerencia, eventPost.documentId!!)
-                        }else{//si no es null, retomamos nuestra sugerencia y le damos los nuevos valores,
-                            //es decir, es una actualizacion
-                            sugerencia?.apply {
-                                name = it.etNombreSuj.text.toString().trim()
-                                description = it.etDescriptionSuj.text.toString().trim()
-                                imgUrl = eventPost.photoUrl
-                            }
-                        }
-                    }
-                }
-            }
+        binding.btnAceptar.setOnClickListener {
+            viewModel.onClickAccept()
         }
     }
 
     private fun configButtons(){
-        binding?.let {
-            it.ibSuggestion.setOnClickListener {
-                openGallery()
-            }
-        }
+        binding.ibSuggestion.setOnClickListener { openGallery() }
     }
 
     private fun openGallery() {
@@ -197,122 +135,10 @@ class AddFragment : Fragment(), AdapterView.OnItemSelectedListener {
         resultLauncher.launch(intent)
     }
 
-    /**
-     * metodo para subir imagenes al storage
-     */
-    private fun uploadImage(sujerenciaId: String?, callback: (EventPost)->Unit){ //que retorna Unit sig que no retorna nada
-        //creamos una nueva instancia de EventPost, la cual va a contener el documento
-        val eventPost = EventPost()
-        //El signo de Elvis, hace que en caso de que sea null, agarre el id del nuevo documento, sino
-        // que se quede con el id de la sugerencia actual.
-        //Extraemos el id del document. Estamos reservando un lugar para que la imagen que subamos
-        // tenga como nombre este id. Posteriormente, una vez que termine el proceso de subir vamos a
-        // regresar ese documento para que la imagen que vayamos a subir sea asignada con el nombre
-        // de este id y posteriormente, despues de que se suba nuestra imagen, ahora si, vamos a
-        // agarrar el mismo document id para insertar un nuevo registro
-        eventPost.documentId = sujerenciaId ?: FirebaseFirestore.getInstance().collection(Constants.COLL_SUGGEST)
-            .document().id
-        //hacemos una instancia a la raiz del servidor
-        val storageRef = FirebaseStorage.getInstance().reference
-            //ponemos como hijo una carpeta donde almacenar las imagenes
-            .child(Constants.PATH_SUGGEST_IMAGES)
-        //si photoSelectedUri es != de null y binding tb
-        photoSelectedUri?.let { uri ->
-            binding?.let { binding ->
-                //hacemos visible el progressbar
-                binding.progressBar.visibility = View.VISIBLE
-                //creamos una nueva referencia que apunta al id de la foto
-                val photoRef = storageRef.child(eventPost.documentId!!)
-                //comenzamos a subir la imagen. uri es photoSelectedUri
-                photoRef.putFile(uri)
-                    //para la barra de progreso al subir la foto
-                    .addOnProgressListener {
-                        //con esto obtenemos los bytes tranferidos respecto al total
-                        val progress = (100 * it.bytesTransferred / it.totalByteCount).toInt()
-                        it.run {
-                            binding.progressBar.progress = progress
-                            binding.tvProgress.text = String.format("%s%%", progress)
-                        }
-                    }
-                    .addOnSuccessListener {
-                        //extraemos la url para descargar
-                        it.storage.downloadUrl.addOnSuccessListener { downloadUrl ->
-                            Log.i("URL", downloadUrl.toString())
-                            //la imagen ya ha sido subida al storage con putFile, ahora vamos a insertarla en Firestore
-                            eventPost.isSuccess = true
-                            eventPost.photoUrl = downloadUrl.toString()
-                            callback(eventPost)
-                        }
-                    }
-                    .addOnFailureListener{
-                        Toast.makeText(activity, "Error al subir imagen.", Toast.LENGTH_SHORT).show()
-                        eventPost.isSuccess = false
-                        callback(eventPost)
-                    }
-            }
-        }
-    }
 
-    private fun save(sugerencia: Sugerencia, documentId: String){
-        //subir sugerencia a Firestore
-        FirebaseAuth.getInstance().uid?.let { id ->
-            FirebaseAuth.getInstance().currentUser?.displayName?.let { name ->
-                    viewModel.registrarSugerenciaEnFirestore(
-                        id,
-                        sugerencia.category!!,
-                        sugerencia.typeCategory!!,
-                        sugerencia.name!!,
-                        sugerencia.description!!,
-                        sugerencia.imgUrl!!)
-            }
-        }
-//        //creamos una instancia de la base de datos de Firestore
-//        val db = FirebaseFirestore.getInstance()
-//        db.collection(Constants.COLL_SUGGEST)
-//            //le seteamos el id de forma manual
-//            .document(documentId)
-//            .set(sugerencia)
-//            .addOnSuccessListener {
-//                Toast.makeText(activity, "Sujerencia añadida.", Toast.LENGTH_SHORT).show()
-//            }
-//            .addOnFailureListener {
-//                Toast.makeText(activity, "Error al insertar.", Toast.LENGTH_SHORT).show()
-//
-//            }
-//            .addOnCompleteListener {
-//                //Unicamente sera mostrado el progressbar cuando haya una subida en proceso, es decir,
-//                //cuando se termine se ocultara
-//                //todo:hacer que sea visible o no con el loading del xml
-//                binding?.progressBar?.visibility = View.INVISIBLE
-//            }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        //para poder desvincular binding
-        binding = null
-    }
-
-    override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-        typeCategory = parent?.getItemAtPosition(position).toString()
-    }
-
-    override fun onNothingSelected(parent: AdapterView<*>?) {
-        TODO("Not yet implemented")
-    }
-
-//    fun onItemSelectedListener(parent: AdapterView<*>, view: View?, pos: Int, id: Long) {
-//        // An item was selected. You can retrieve the selected item using
-//        typeCategory = parent.getItemAtPosition(pos).toString()
-//    }
-//
-//    override fun onNothingSelected(parent: AdapterView<*>) {
-//        // Another interface callback
-//    }
     private fun errorToString(error: com.pedroaguilar.amigodeviaje.common.Error) = when (error) {
         Connectivity -> requireContext().getString(R.string.connectivity_error)
         is Server -> requireContext().getString(R.string.server_error) + error.code
         else -> requireContext().getString(R.string.unknown_error)
     }
-
 }

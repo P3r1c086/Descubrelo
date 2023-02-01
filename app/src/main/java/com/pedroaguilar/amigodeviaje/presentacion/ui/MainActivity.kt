@@ -21,8 +21,8 @@ import com.google.firebase.auth.FirebaseAuth.AuthStateListener
 import com.pedroaguilar.amigodeviaje.R
 import com.pedroaguilar.amigodeviaje.common.Error.Connectivity
 import com.pedroaguilar.amigodeviaje.common.Error.Server
-import com.pedroaguilar.amigodeviaje.common.launchAndCollect
 import com.pedroaguilar.amigodeviaje.databinding.ActivityMainBinding
+import com.pedroaguilar.amigodeviaje.modelo.launchAndCollect
 
 
 class MainActivity : AppCompatActivity() {

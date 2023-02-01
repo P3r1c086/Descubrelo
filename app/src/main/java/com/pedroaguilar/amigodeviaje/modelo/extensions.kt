@@ -1,4 +1,4 @@
-package com.pedroaguilar.amigodeviaje.common
+package com.pedroaguilar.amigodeviaje.modelo
 
 import android.widget.ImageView
 import androidx.lifecycle.*

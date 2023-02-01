@@ -4,20 +4,21 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-        <import type="com.pedroaguilar.amigodeviaje.common.entities.Sugerencia" />
-
         <variable
             name="loading"
             type="boolean" />
 
         <variable
-            name="sugerencia"
-            type="Sugerencia" />
+            name="progressLoading"
+            type="String" />
 
         <variable
             name="error"
             type="String" />
 
+        <variable
+            name="habilitarAceptar"
+            type="boolean" />
     </data>
 
 <ScrollView
@@ -159,6 +160,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/common_padding_min"
             android:gravity="center"
+            android:text="@{progressLoading}"
             tools:text="Subiendo...75%" />
 
         <Button
@@ -169,7 +171,7 @@
             android:layout_marginBottom="156dp"
             android:layout_gravity="center"
             android:text="aceptar"
-            app:enabled="@{}"/>
+            app:enabled="@{habilitarAceptar}"/>
     </LinearLayout>
 </ScrollView>
 </layout>

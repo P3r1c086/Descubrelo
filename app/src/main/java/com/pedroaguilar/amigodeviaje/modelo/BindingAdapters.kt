@@ -3,8 +3,8 @@ package com.pedroaguilar.amigodeviaje.common
 import android.view.View
 import android.widget.Button
 import android.widget.ImageView
-import android.widget.SpinnerAdapter
 import androidx.databinding.BindingAdapter
+import com.pedroaguilar.amigodeviaje.modelo.loadUrl
 
 @BindingAdapter("url")
 fun ImageView.bindUrl(url: String?) {
