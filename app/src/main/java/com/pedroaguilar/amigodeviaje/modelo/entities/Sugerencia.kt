@@ -1,4 +1,4 @@
-package com.pedroaguilar.amigodeviaje.common.entities
+package com.pedroaguilar.amigodeviaje.modelo.entities
 
 import com.google.firebase.firestore.Exclude
 
@@ -10,7 +10,7 @@ import com.google.firebase.firestore.Exclude
  * All rights reserved 2023
  **/
 data class Sugerencia(
-    @get:Exclude var id: String? = null,
+    var id: String? = null,
     var category: String? = null,
     var typeCategory: String? = null,
     var name: String? = null,

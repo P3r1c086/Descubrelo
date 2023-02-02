@@ -1,15 +1,13 @@
 package com.pedroaguilar.amigodeviaje.servicios
 
-import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.FirestoreRegistrar
-import com.pedroaguilar.amigodeviaje.common.Constants
-import com.pedroaguilar.amigodeviaje.common.entities.Sugerencia
-import com.pedroaguilar.amigodeviaje.common.entities.Usuario
+import com.pedroaguilar.amigodeviaje.modelo.Constants
+import com.pedroaguilar.amigodeviaje.modelo.entities.Sugerencia
+import com.pedroaguilar.amigodeviaje.modelo.entities.Usuario
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume
 
@@ -22,6 +20,7 @@ class ServicioFirebaseDatabase {
         FirebaseDatabase.getInstance().getReference(Constantes.NODO_USUARIOS)
     private val firestoreReferenceSugerencias: CollectionReference =
         FirebaseFirestore.getInstance().collection(Constants.COLL_SUGGEST)
+    private var numeroSugerencias: Int = 0
 
     //Zona Usuario
     /**
@@ -53,16 +52,33 @@ class ServicioFirebaseDatabase {
                 }
         }
     //Zona Sugerencia
-    suspend fun registrarSugerencia(firebaseAuthUsuarioId: String, sugerencia: Sugerencia): Sugerencia? =
+    suspend fun registrarSugerencia(firebaseAuthUsuarioId: String, sugerencia: Sugerencia,
+                                    idSugerenciaUser: String): Sugerencia? =
         suspendCancellableCoroutine { continuation ->
             firestoreReferenceSugerencias
-            .document(firebaseAuthUsuarioId).set(sugerencia).addOnCompleteListener { task ->
+            .document(firebaseAuthUsuarioId)
+                .collection("sugerenciasUser")
+                .document(idSugerenciaUser)
+                .set(sugerencia)
+                .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     continuation.resume(sugerencia)
                 } else {
                     continuation.resume(null)
                 }
             }
+        }
 
+    suspend fun cuentaSugerencia(firebaseAuthUsuarioId: String): Int? =
+        suspendCancellableCoroutine { continuation ->
+            firestoreReferenceSugerencias
+                .document(firebaseAuthUsuarioId).collection("sugerenciasUser")
+                .get()
+                .addOnSuccessListener { task ->
+                    numeroSugerencias = task.size()
+                }
+                .addOnFailureListener {
+                }
+            continuation.resume(numeroSugerencias)
         }
 }

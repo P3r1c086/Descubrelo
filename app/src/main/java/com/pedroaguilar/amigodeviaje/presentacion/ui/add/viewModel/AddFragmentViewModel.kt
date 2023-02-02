@@ -7,10 +7,10 @@ import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
-import com.pedroaguilar.amigodeviaje.common.Constants
 import com.pedroaguilar.amigodeviaje.common.Error
-import com.pedroaguilar.amigodeviaje.common.entities.EventPost
-import com.pedroaguilar.amigodeviaje.common.entities.Sugerencia
+import com.pedroaguilar.amigodeviaje.modelo.Constants
+import com.pedroaguilar.amigodeviaje.modelo.entities.EventPost
+import com.pedroaguilar.amigodeviaje.modelo.entities.Sugerencia
 import com.pedroaguilar.amigodeviaje.servicios.ServicioFirebaseDatabase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -36,8 +36,11 @@ class AddFragmentViewModel: ViewModel() {
                                               nombre: String?, descripcion: String?,
                                               imgUrl: String?){
         viewModelScope.launch {
-            val sugerenciaPorUsuario = firebaseDatabase.registrarSugerencia(uidUser,
-            Sugerencia(uidUser, category, typeCategory ,nombre, descripcion, imgUrl))
+            val sugerenciaPorUsuario = firebaseDatabase.registrarSugerencia(
+                uidUser,
+                Sugerencia(uidUser, category, typeCategory ,nombre, descripcion, imgUrl),
+                idSugerenciaUser(uidUser)
+            )
             if (sugerenciaPorUsuario != null){
                 _state.update {
                     _state.value.copy(
@@ -57,7 +60,6 @@ class AddFragmentViewModel: ViewModel() {
     fun setName(nombre: String){
         _state.update { _state.value.copy(nombre = nombre) }
     }
-
     fun setDescription(description: String){
         _state.update { _state.value.copy(descripcion = description) }
     }
@@ -77,6 +79,7 @@ class AddFragmentViewModel: ViewModel() {
         uploadImage { eventPost ->
             //si la imagen fue subida correctamente
             if (eventPost.isSuccess){
+                //todo:crear nuevo hijo para almacenar varias sugerencias por usuario
                 FirebaseAuth.getInstance().uid?.let { id -> registrarSugerenciaEnFirestore(
                     id, category = _state.value.category,
                     typeCategory = _state.value.typeCategory,
@@ -144,6 +147,20 @@ class AddFragmentViewModel: ViewModel() {
                 }
 
         }
+    }
+
+    fun idSugerenciaUser(uidUser: String): String{
+        var idNodoSugerencia: String = ""
+        var numSugerencias: Int = 0
+        viewModelScope.launch {
+            numSugerencias = firebaseDatabase.cuentaSugerencia(uidUser)!!
+            if (numSugerencias == 0){
+                idNodoSugerencia = "Sugerencia1"
+            }else{
+                idNodoSugerencia = "Sugerencia" + "${numSugerencias + 1}"
+            }
+        }
+        return idNodoSugerencia
     }
 
     data class UiState(
