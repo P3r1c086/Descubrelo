@@ -1,4 +1,4 @@
-package com.pedroaguilar.amigodeviaje.common.entities
+package com.pedroaguilar.amigodeviaje.modelo.entities
 
 /**
  * Proyect: Amigo De Viaje

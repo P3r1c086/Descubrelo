@@ -3,7 +3,7 @@ package com.pedroaguilar.amigodeviaje.presentacion.ui
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.pedroaguilar.amigodeviaje.common.Error
-import com.pedroaguilar.amigodeviaje.common.entities.Usuario
+import com.pedroaguilar.amigodeviaje.modelo.entities.Usuario
 import com.pedroaguilar.amigodeviaje.servicios.ServicioFirebaseDatabase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow

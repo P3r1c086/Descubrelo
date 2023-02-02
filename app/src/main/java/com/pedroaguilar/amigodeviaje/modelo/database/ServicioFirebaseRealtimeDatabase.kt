@@ -1,7 +1,7 @@
-package com.pedroaguilar.amigodeviaje.common.database
+package com.pedroaguilar.amigodeviaje.modelo.database
 
 import com.google.firebase.database.FirebaseDatabase
-import com.pedroaguilar.amigodeviaje.common.entities.Sugerencia
+import com.pedroaguilar.amigodeviaje.modelo.entities.Sugerencia
 
 /**
  * Proyect: Amigo De Viaje

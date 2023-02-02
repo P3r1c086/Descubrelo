@@ -7,7 +7,7 @@ package com.pedroaguilar.amigodeviaje.presentacion.ui.add.model
  * More info: linkedin.com/in/pedro-aguilar-fernández-167753140
  * All rights reserved 2023
  **/
-class AddSuggestionRepository {
+class AddFragmentRepository {
 
 
 }

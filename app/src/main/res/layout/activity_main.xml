@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-        <import type="com.pedroaguilar.amigodeviaje.common.entities.Usuario" />
+        <import type="com.pedroaguilar.amigodeviaje.modelo.entities.Usuario" />
 
         <variable
             name="loading"
