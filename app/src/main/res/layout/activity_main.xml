@@ -40,6 +40,7 @@
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                app:titleTextColor="?attr/colorOnPrimary"
                 app:title="@{usuario.nombre}" />
 
         </com.google.android.material.appbar.AppBarLayout>
