@@ -78,6 +78,7 @@ class ServicioFirebaseDatabase {
                     numeroSugerencias = task.size()
                 }
                 .addOnFailureListener {
+                    continuation.resume(null)
                 }
             continuation.resume(numeroSugerencias)
         }

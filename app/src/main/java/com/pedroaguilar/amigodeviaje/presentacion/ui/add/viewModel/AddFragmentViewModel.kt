@@ -32,9 +32,9 @@ class AddFragmentViewModel: ViewModel() {
 
     private val firebaseDatabase: ServicioFirebaseDatabase = ServicioFirebaseDatabase()
 
-    fun registrarSugerenciaEnFirestore(uidUser: String, category: String?, typeCategory: String?,
-                                              nombre: String?, descripcion: String?,
-                                              imgUrl: String?){
+    private fun registrarSugerenciaEnFirestore(uidUser: String, category: String?, typeCategory: String?,
+                                               nombre: String?, descripcion: String?,
+                                               imgUrl: String?){
         viewModelScope.launch {
             val sugerenciaPorUsuario = firebaseDatabase.registrarSugerencia(
                 uidUser,
@@ -149,15 +149,15 @@ class AddFragmentViewModel: ViewModel() {
         }
     }
 
-    fun idSugerenciaUser(uidUser: String): String{
-        var idNodoSugerencia: String = ""
-        var numSugerencias: Int = 0
+    private fun idSugerenciaUser(uidUser: String): String{
+        var idNodoSugerencia = ""
+        var numSugerencias: Int?
         viewModelScope.launch {
-            numSugerencias = firebaseDatabase.cuentaSugerencia(uidUser)!!
-            if (numSugerencias == 0){
-                idNodoSugerencia = "Sugerencia1"
-            }else{
-                idNodoSugerencia = "Sugerencia" + "${numSugerencias + 1}"
+            numSugerencias = firebaseDatabase.cuentaSugerencia(uidUser)
+            idNodoSugerencia = if (numSugerencias == null || numSugerencias == 0){
+                "Sugerencia1"
+            } else {
+                "Sugerencia" + (numSugerencias.toString() + 1)
             }
         }
         return idNodoSugerencia

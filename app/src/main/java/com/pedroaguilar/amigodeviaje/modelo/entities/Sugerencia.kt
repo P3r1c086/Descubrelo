@@ -1,7 +1,5 @@
 package com.pedroaguilar.amigodeviaje.modelo.entities
 
-import com.google.firebase.firestore.Exclude
-
 /**
  * Proyect: Amigo De Viaje
  * From: com.pedroaguilar.amigodeviaje.common.entities.utils
