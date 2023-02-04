@@ -3,6 +3,8 @@ package com.pedroaguilar.amigodeviaje.presentacion.ui.add
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.provider.MediaStore
 import android.text.Editable
 import android.text.TextWatcher
@@ -50,7 +52,7 @@ class AddFragment : Fragment() {
             binding.progressText = if (!it.sugerenciaSubidaCorrectamente) {
                 String.format("%s%%", it.progressLoading)
             } else {
-                "Sugerencia subida con éxito!"
+                "Sugerencia subida con éxito!\n Cerrando la pantalla"
             }
             binding.error = it.error?.let(::errorToString)
             binding.habilitarAceptar = !it.category.isNullOrBlank()
@@ -58,10 +60,21 @@ class AddFragment : Fragment() {
                     && !it.nombre.isNullOrBlank()
                     && !it.descripcion.isNullOrBlank()
                     && !it.photoSelectedUri.isNullOrBlank()
+                    && !it.loading
+                    && !it.sugerenciaSubidaCorrectamente
+            if (it.sugerenciaSubidaCorrectamente){
+                cerrarPantalla()
+            }
         }
         configButtons()
         listener()
         spinnerListener()
+    }
+
+    private fun cerrarPantalla(){
+        Handler(Looper.getMainLooper()).postDelayed({
+           activity?.onBackPressedDispatcher?.onBackPressed()
+        }, 2000)
     }
 
     private fun spinnerListener(){
