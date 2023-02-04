@@ -36,20 +36,25 @@ class AddFragmentViewModel: ViewModel() {
                                                nombre: String?, descripcion: String?,
                                                imgUrl: String?){
         viewModelScope.launch {
-            val sugerenciaPorUsuario = firebaseDatabase.registrarSugerencia(
-                uidUser,
-                Sugerencia(uidUser, category, typeCategory ,nombre, descripcion, imgUrl),
-                idSugerenciaUser(uidUser)
-            )
-            if (sugerenciaPorUsuario != null){
-                _state.update {
-                    _state.value.copy(
-                        loading = false,
-                        sugerenciaSubidaCorrectamente = true
-                    )
-                }
-            } else {
+            val idSugerencia = firebaseDatabase.idSugerenciaUser(uidUser)
+            if (idSugerencia == null){
                 _state.update { _state.value.copy(loading = false, error = Error.Server(456)) }
+            } else {
+                val sugerenciaPorUsuario = firebaseDatabase.registrarSugerencia(
+                    uidUser,
+                    Sugerencia(idSugerencia, category, typeCategory, nombre, descripcion, imgUrl),
+                    idSugerencia
+                )
+                if (sugerenciaPorUsuario != null) {
+                    _state.update {
+                        _state.value.copy(
+                            loading = false,
+                            sugerenciaSubidaCorrectamente = true
+                        )
+                    }
+                } else {
+                    _state.update { _state.value.copy(loading = false, error = Error.Server(456)) }
+                }
             }
         }
     }
@@ -147,20 +152,6 @@ class AddFragmentViewModel: ViewModel() {
                 }
 
         }
-    }
-
-    private fun idSugerenciaUser(uidUser: String): String{
-        var idNodoSugerencia = ""
-        var numSugerencias: Int?
-        viewModelScope.launch {
-            numSugerencias = firebaseDatabase.cuentaSugerencia(uidUser)
-            idNodoSugerencia = if (numSugerencias == null || numSugerencias == 0){
-                "Sugerencia1"
-            } else {
-                "Sugerencia" + (numSugerencias.toString() + 1)
-            }
-        }
-        return idNodoSugerencia
     }
 
     data class UiState(

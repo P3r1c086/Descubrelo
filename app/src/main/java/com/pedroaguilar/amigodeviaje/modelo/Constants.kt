@@ -8,7 +8,7 @@ package com.pedroaguilar.amigodeviaje.modelo
  * All rights reserved 2022
  **/
 object Constants {
-    const val COLL_SUGGEST = "sujerencias"
+    const val COLL_SUGGEST = "sugerencias"
     const val COLL_USERS = "users"
     //storage
     const val PATH_SUGGEST_IMAGES = "suggest_images"

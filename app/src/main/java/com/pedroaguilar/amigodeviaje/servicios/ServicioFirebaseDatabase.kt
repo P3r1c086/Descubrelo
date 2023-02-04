@@ -20,7 +20,6 @@ class ServicioFirebaseDatabase {
         FirebaseDatabase.getInstance().getReference(Constantes.NODO_USUARIOS)
     private val firestoreReferenceSugerencias: CollectionReference =
         FirebaseFirestore.getInstance().collection(Constants.COLL_SUGGEST)
-    private var numeroSugerencias: Int = 0
 
     //Zona Usuario
     /**
@@ -69,17 +68,21 @@ class ServicioFirebaseDatabase {
             }
         }
 
-    suspend fun cuentaSugerencia(firebaseAuthUsuarioId: String): Int? =
+    suspend fun idSugerenciaUser(uidUser: String): String? =
         suspendCancellableCoroutine { continuation ->
             firestoreReferenceSugerencias
-                .document(firebaseAuthUsuarioId).collection("sugerenciasUser")
+                .document(uidUser).collection("sugerenciasUser")
                 .get()
                 .addOnSuccessListener { task ->
-                    numeroSugerencias = task.size()
+                    val numSugerencias = task.size()
+                    if (numSugerencias == 0) {
+                        continuation.resume("Sugerencia1")
+                    } else {
+                        continuation.resume("Sugerencia" + (numSugerencias + 1))
+                    }
                 }
                 .addOnFailureListener {
                     continuation.resume(null)
                 }
-            continuation.resume(numeroSugerencias)
         }
 }
