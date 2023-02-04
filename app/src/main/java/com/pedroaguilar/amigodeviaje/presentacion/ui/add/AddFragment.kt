@@ -56,7 +56,7 @@ class AddFragment : Fragment() {
             }
             binding.error = it.error?.let(::errorToString)
             binding.habilitarAceptar = !it.category.isNullOrBlank()
-                        && !it.typeCategory.isNullOrBlank()
+                        && seleccionCorrectaSpinner()
                     && !it.nombre.isNullOrBlank()
                     && !it.descripcion.isNullOrBlank()
                     && !it.photoSelectedUri.isNullOrBlank()
@@ -75,6 +75,10 @@ class AddFragment : Fragment() {
         Handler(Looper.getMainLooper()).postDelayed({
            activity?.onBackPressedDispatcher?.onBackPressed()
         }, 2000)
+    }
+
+    private fun seleccionCorrectaSpinner(): Boolean{
+        return binding.spTypeCategory.selectedItemPosition != 0
     }
 
     private fun spinnerListener(){
