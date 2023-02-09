@@ -4,9 +4,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.get
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.NavHostFragment
+import com.pedroaguilar.amigodeviaje.FiestaFragment
 import com.pedroaguilar.amigodeviaje.R
 import com.pedroaguilar.amigodeviaje.databinding.FragmentHomeBinding
 import com.pedroaguilar.amigodeviaje.modelo.launchAndCollect
@@ -46,20 +48,26 @@ class HomeFragment : Fragment() {
                 //setInfinite(true)
             }
         }
-        loadCarruselImagesList()
+//        loadCarruselImagesList()
+        loadCarrusel3dImagesList()
     }
 
-    private fun loadCarruselImagesList(){
-        with (binding.carouselWeekend){
-            autoPlay = true
-            addData(list)
-            carouselListener = object : CarouselListener {
-                override fun onClick(position: Int, carouselItem: CarouselItem) {
-                    //Todo: enviar argumentos con informacion del item pulsado -> Correcto!! Eso te falta
-                    ((activity as MainActivity).supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment)
-                        .navController.navigate(R.id.action_homeFragment_to_detailsFragment)
-                }
-            }
-        }
+//    private fun loadCarruselImagesList(){
+//        with (binding.carouselWeekend){
+//            autoPlay = true
+//            addData(list)
+//            carouselListener = object : CarouselListener {
+//                override fun onClick(position: Int, carouselItem: CarouselItem) {
+//                    //Todo: enviar argumentos con informacion del item pulsado -> Correcto!! Eso te falta
+//                    ((activity as MainActivity).supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment)
+//                        .navController.navigate(R.id.action_homeFragment_to_detailsFragment)
+//                }
+//            }
+//        }
+//    }
+
+    private fun loadCarrusel3dImagesList(){
+        //todo: He intentado hacer el clickListener desde aqui y desde el adapter, pero no me sale
     }
+
 }

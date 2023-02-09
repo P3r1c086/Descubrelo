@@ -20,6 +20,13 @@
             app:destination="@id/add_dest"
             android:inAnimation="@android:anim/slide_in_left"
             android:outAnimation="@android:anim/slide_out_right"/>
+        <action
+            android:id="@+id/action_home_dest_to_fiestaFragment"
+            app:destination="@id/fiesta_dest" />
+        <action
+            android:id="@+id/action_home_dest_to_turismoFragment"
+            app:destination="@id/turismo_dest" />
+
     </fragment>
     <fragment
         android:id="@+id/details_dest"
@@ -64,4 +71,14 @@
             android:inAnimation="@android:anim/slide_in_left"
             android:outAnimation="@android:anim/slide_out_right"/>
     </fragment>
+    <fragment
+        android:id="@+id/fiesta_dest"
+        android:name="com.pedroaguilar.amigodeviaje.FiestaFragment"
+        android:label="Fiesta"
+        tools:layout="@layout/fragment_fiesta" />
+    <fragment
+        android:id="@+id/turismo_dest"
+        android:name="com.pedroaguilar.amigodeviaje.TurismoFragment"
+        android:label="Turismo"
+        tools:layout="@layout/fragment_turismo" />
 </navigation>

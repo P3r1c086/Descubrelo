@@ -87,6 +87,7 @@
             android:contentDescription="@string/app_name"
             android:src="@drawable/ic_playlist_add"
             app:layout_anchor="@id/bottomAppBar"
+            android:backgroundTint="?attr/colorSecondaryVariant"
             app:visible="@{ error == null &amp;&amp; !loading}"/>
 
         <LinearLayout
