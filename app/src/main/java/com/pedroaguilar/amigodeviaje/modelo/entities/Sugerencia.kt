@@ -1,5 +1,7 @@
 package com.pedroaguilar.amigodeviaje.modelo.entities
 
+import com.pedroaguilar.amigodeviaje.modelo.Categorias
+
 /**
  * Proyect: Amigo De Viaje
  * From: com.pedroaguilar.amigodeviaje.common.entities.utils
@@ -9,7 +11,7 @@ package com.pedroaguilar.amigodeviaje.modelo.entities
  **/
 data class Sugerencia(
     var id: String? = null,
-    var category: String? = null,
+    var category: Categorias? = null,
     var typeCategory: String? = null,
     var name: String? = null,
     var description: String? = null,

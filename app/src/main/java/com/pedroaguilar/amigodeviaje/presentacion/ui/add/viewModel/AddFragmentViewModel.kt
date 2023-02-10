@@ -8,6 +8,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.pedroaguilar.amigodeviaje.common.Error
+import com.pedroaguilar.amigodeviaje.modelo.Categorias
 import com.pedroaguilar.amigodeviaje.modelo.Constants
 import com.pedroaguilar.amigodeviaje.modelo.entities.EventPost
 import com.pedroaguilar.amigodeviaje.modelo.entities.Sugerencia
@@ -32,7 +33,7 @@ class AddFragmentViewModel: ViewModel() {
 
     private val firebaseDatabase: ServicioFirebaseDatabase = ServicioFirebaseDatabase()
 
-    private fun registrarSugerenciaEnFirestore(uidUser: String, category: String?, typeCategory: String?,
+    private fun registrarSugerenciaEnFirestore(uidUser: String, category: Categorias?, typeCategory: String?,
                                                nombre: String?, descripcion: String?,
                                                imgUrl: String?){
         viewModelScope.launch {
@@ -59,7 +60,7 @@ class AddFragmentViewModel: ViewModel() {
         }
     }
 
-    fun setCategory(category: String){
+    fun setCategory(category: Categorias){
         _state.update { _state.value.copy(category = category) }
     }
     fun setName(nombre: String){
@@ -157,7 +158,7 @@ class AddFragmentViewModel: ViewModel() {
     data class UiState(
         val loading: Boolean = false,
         val progressLoading: Int = 0,
-        val category: String? = null,
+        val category: Categorias? = null,
         val typeCategory: String? = null,
         val photoSelectedUri: String? = null,
         val nombre: String? = null,

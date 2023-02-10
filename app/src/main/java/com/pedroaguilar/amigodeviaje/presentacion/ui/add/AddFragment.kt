@@ -20,6 +20,7 @@ import com.pedroaguilar.amigodeviaje.R
 import com.pedroaguilar.amigodeviaje.common.Error.Connectivity
 import com.pedroaguilar.amigodeviaje.common.Error.Server
 import com.pedroaguilar.amigodeviaje.databinding.FragmentAddBinding
+import com.pedroaguilar.amigodeviaje.modelo.Categorias
 import com.pedroaguilar.amigodeviaje.modelo.launchAndCollect
 import com.pedroaguilar.amigodeviaje.modelo.loadUrl
 import com.pedroaguilar.amigodeviaje.presentacion.ui.add.viewModel.AddFragmentViewModel
@@ -55,7 +56,7 @@ class AddFragment : Fragment() {
                 "Sugerencia subida con éxito!\n Cerrando la pantalla"
             }
             binding.error = it.error?.let(::errorToString)
-            binding.habilitarAceptar = !it.category.isNullOrBlank()
+            binding.habilitarAceptar = it.category == null
                         && seleccionCorrectaSpinner()
                     && !it.nombre.isNullOrBlank()
                     && !it.descripcion.isNullOrBlank()
@@ -85,23 +86,23 @@ class AddFragment : Fragment() {
         binding.rgSuggestion.setOnCheckedChangeListener { _, _ ->
             when {
                 binding.rbEat.isChecked -> {
-                    viewModel.setCategory("comer")
+                    viewModel.setCategory(Categorias.COMER)
                     cargarSpinner(R.array.sujerencias_comer)
                 }
                 binding.rbSleep.isChecked -> {
-                    viewModel.setCategory("dormir")
+                    viewModel.setCategory(Categorias.DORMIR)
                     cargarSpinner(R.array.sujerencias_dormir)
                 }
                 binding.rbParty.isChecked -> {
-                    viewModel.setCategory("fiesta")
+                    viewModel.setCategory(Categorias.FIESTA)
                     cargarSpinner(R.array.sujerencias_fiesta)
                 }
                 binding.rbTourism.isChecked -> {
-                    viewModel.setCategory("turismo")
+                    viewModel.setCategory(Categorias.TURISMO)
                     cargarSpinner(R.array.sujerencias_turismo)
                 }
                 binding.rbAdventure.isChecked -> {
-                    viewModel.setCategory("aventura")
+                    viewModel.setCategory(Categorias.AVENTURA)
                     cargarSpinner(R.array.sujerencias_aventura)
                 }
             }

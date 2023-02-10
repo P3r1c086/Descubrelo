@@ -2,11 +2,12 @@ package com.pedroaguilar.amigodeviaje.presentacion.ui.main.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
-import com.pedroaguilar.amigodeviaje.FiestaFragment
 import com.pedroaguilar.amigodeviaje.R
 import com.pedroaguilar.amigodeviaje.databinding.SugerenciaItemBinding
+import com.pedroaguilar.amigodeviaje.modelo.Categorias
 import com.pedroaguilar.amigodeviaje.modelo.entities.Sugerencia
 
 /**
@@ -27,18 +28,16 @@ class SugerenciaAdapter(var dataSet: ArrayList<Sugerencia>) :
     }
 
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
-
         viewHolder.view.sugerencia = dataSet[position]
-        val sugerencia = dataSet[position]
         viewHolder.itemView.setOnClickListener {
             when(dataSet[position].category){
-                sugerencia.category -> it.findNavController().navigate(R.id.action_home_dest_to_fiestaFragment)
-                sugerencia.category -> it.findNavController().navigate(R.id.action_home_dest_to_turismoFragment)
-//                sugerencia -> it.findNavController().navigate(R.id.action_home_dest_to_fiestaFragment)
-//                sugerencia -> it.findNavController().navigate(R.id.action_home_dest_to_fiestaFragment)
-//                sugerencia -> it.findNavController().navigate(R.id.action_home_dest_to_fiestaFragment)
+                Categorias.COMER -> Toast.makeText(viewHolder.view.root.context, "Click No implementado", Toast.LENGTH_SHORT).show()
+                Categorias.DORMIR -> Toast.makeText(viewHolder.view.root.context, "Click No implementado", Toast.LENGTH_SHORT).show()
+                Categorias.FIESTA -> it.findNavController().navigate(R.id.action_home_dest_to_fiestaFragment)
+                Categorias.TURISMO ->  it.findNavController().navigate(R.id.action_home_dest_to_turismoFragment)
+                Categorias.AVENTURA -> Toast.makeText(viewHolder.view.root.context, "Click No implementado", Toast.LENGTH_SHORT).show()
+                null -> Toast.makeText(viewHolder.view.root.context, "Click No implementado", Toast.LENGTH_SHORT).show()
             }
-            //it.findNavController().navigate(R.id.action_home_dest_to_fiestaFragment)
         }
     }
     override fun getItemCount() = dataSet.size
