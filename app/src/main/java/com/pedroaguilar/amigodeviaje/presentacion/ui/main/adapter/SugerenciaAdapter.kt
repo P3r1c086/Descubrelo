@@ -31,11 +31,11 @@ class SugerenciaAdapter(var dataSet: ArrayList<Sugerencia>) :
         viewHolder.view.sugerencia = dataSet[position]
         viewHolder.itemView.setOnClickListener {
             when(dataSet[position].category){
-                Categorias.COMER -> Toast.makeText(viewHolder.view.root.context, "Click No implementado", Toast.LENGTH_SHORT).show()
-                Categorias.DORMIR -> Toast.makeText(viewHolder.view.root.context, "Click No implementado", Toast.LENGTH_SHORT).show()
+                Categorias.COMER -> it.findNavController().navigate(R.id.action_home_dest_to_comerFragment)
+                Categorias.DORMIR -> it.findNavController().navigate(R.id.action_home_dest_to_dormirFragment)
                 Categorias.FIESTA -> it.findNavController().navigate(R.id.action_home_dest_to_fiestaFragment)
                 Categorias.TURISMO ->  it.findNavController().navigate(R.id.action_home_dest_to_turismoFragment)
-                Categorias.AVENTURA -> Toast.makeText(viewHolder.view.root.context, "Click No implementado", Toast.LENGTH_SHORT).show()
+                Categorias.AVENTURA -> it.findNavController().navigate(R.id.action_home_dest_to_aventuraFragment)
                 null -> Toast.makeText(viewHolder.view.root.context, "Click No implementado", Toast.LENGTH_SHORT).show()
             }
         }

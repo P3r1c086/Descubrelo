@@ -26,6 +26,15 @@
         <action
             android:id="@+id/action_home_dest_to_turismoFragment"
             app:destination="@id/turismo_dest" />
+        <action
+            android:id="@+id/action_home_dest_to_comerFragment"
+            app:destination="@id/comer_dest" />
+        <action
+            android:id="@+id/action_home_dest_to_dormirFragment"
+            app:destination="@id/dormir_dest" />
+        <action
+            android:id="@+id/action_home_dest_to_aventuraFragment"
+            app:destination="@id/aventura_dest" />
 
     </fragment>
     <fragment
@@ -73,12 +82,27 @@
     </fragment>
     <fragment
         android:id="@+id/fiesta_dest"
-        android:name="com.pedroaguilar.amigodeviaje.FiestaFragment"
+        android:name="com.pedroaguilar.amigodeviaje.presentacion.ui.fiesta.FiestaFragment"
         android:label="Fiesta"
         tools:layout="@layout/fragment_fiesta" />
     <fragment
         android:id="@+id/turismo_dest"
-        android:name="com.pedroaguilar.amigodeviaje.TurismoFragment"
+        android:name="com.pedroaguilar.amigodeviaje.presentacion.ui.turismo.TurismoFragment"
         android:label="Turismo"
         tools:layout="@layout/fragment_turismo" />
+    <fragment
+        android:id="@+id/comer_dest"
+        android:name="com.pedroaguilar.amigodeviaje.presentacion.ui.comer.ComerFragment"
+        android:label="Comer"
+        tools:layout="@layout/fragment_comer" />
+    <fragment
+        android:id="@+id/dormir_dest"
+        android:name="com.pedroaguilar.amigodeviaje.presentacion.ui.dormir.DormirFragment"
+        android:label="Dormir"
+        tools:layout="@layout/fragment_dormir" />
+    <fragment
+        android:id="@+id/aventura_dest"
+        android:name="com.pedroaguilar.amigodeviaje.presentacion.ui.aventura.AventuraFragment"
+        android:label="Aventura"
+        tools:layout="@layout/fragment_aventura" />
 </navigation>

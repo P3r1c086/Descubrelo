@@ -4,17 +4,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".presentacion.ui.fiesta.FiestaFragment">
+    tools:context=".presentacion.ui.comer.ComerFragment">
 
 
     <SearchView
-        android:id="@+id/searchViewFiesta"
+        android:id="@+id/searchViewComer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/common_padding_default"/>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvFiesta"
+        android:id="@+id/rvComer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         tools:listitem="@layout/sugerencia_comun_item"/>
