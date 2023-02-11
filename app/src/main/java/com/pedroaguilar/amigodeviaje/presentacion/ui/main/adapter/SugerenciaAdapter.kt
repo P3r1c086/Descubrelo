@@ -9,6 +9,7 @@ import com.pedroaguilar.amigodeviaje.R
 import com.pedroaguilar.amigodeviaje.databinding.SugerenciaItemBinding
 import com.pedroaguilar.amigodeviaje.modelo.Categorias
 import com.pedroaguilar.amigodeviaje.modelo.entities.Sugerencia
+import com.pedroaguilar.amigodeviaje.presentacion.ui.dormir.viewModel.DormirFragmentViewModel
 
 /**
  * Proyect: Amigo De Viaje

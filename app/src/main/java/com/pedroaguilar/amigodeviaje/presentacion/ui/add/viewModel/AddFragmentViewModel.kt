@@ -85,7 +85,6 @@ class AddFragmentViewModel: ViewModel() {
         uploadImage { eventPost ->
             //si la imagen fue subida correctamente
             if (eventPost.isSuccess){
-                //todo:crear nuevo hijo para almacenar varias sugerencias por usuario
                 FirebaseAuth.getInstance().uid?.let { id -> registrarSugerenciaEnFirestore(
                     id, category = _state.value.category,
                     typeCategory = _state.value.typeCategory,

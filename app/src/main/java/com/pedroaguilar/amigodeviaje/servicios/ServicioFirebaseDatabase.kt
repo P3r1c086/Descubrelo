@@ -1,5 +1,6 @@
 package com.pedroaguilar.amigodeviaje.servicios
 
+import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
@@ -20,6 +21,7 @@ class ServicioFirebaseDatabase {
         FirebaseDatabase.getInstance().getReference(Constantes.NODO_USUARIOS)
     private val firestoreReferenceSugerencias: CollectionReference =
         FirebaseFirestore.getInstance().collection(Constants.COLL_SUGGEST)
+    private lateinit var sugerenciasList: ArrayList<Sugerencia>
 
     //Zona Usuario
     /**
@@ -85,4 +87,25 @@ class ServicioFirebaseDatabase {
                     continuation.resume(null)
                 }
         }
+
+    suspend fun obtenerTodasSugerencias(uidUser: String) : ArrayList<Sugerencia> =
+        suspendCancellableCoroutine { continuation ->
+            firestoreReferenceSugerencias
+                .document(uidUser).collection("sugerenciasUser")
+                .get()
+                .addOnSuccessListener { snapshots ->
+                    val numSugerencias = snapshots.size()
+                    if (numSugerencias != 0) {
+                        for (document in snapshots){
+                            //extraer cada documento y convertirlo a sugerencia
+                            val sugerencia = document.toObject(Sugerencia::class.java)
+                            sugerenciasList.add(sugerencia)
+                        }
+                        continuation.resume(sugerenciasList)
+                    }
+                }
+//                .addOnFailureListener {
+//                    continuation.resume(null)
+//                }
+    }
 }
