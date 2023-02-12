@@ -1,6 +1,5 @@
 package com.pedroaguilar.amigodeviaje.servicios
 
-import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
@@ -21,7 +20,7 @@ class ServicioFirebaseDatabase {
         FirebaseDatabase.getInstance().getReference(Constantes.NODO_USUARIOS)
     private val firestoreReferenceSugerencias: CollectionReference =
         FirebaseFirestore.getInstance().collection(Constants.COLL_SUGGEST)
-    private lateinit var sugerenciasList: ArrayList<Sugerencia>
+    private val sugerenciasList: ArrayList<Sugerencia> = ArrayList()
 
     //Zona Usuario
     /**

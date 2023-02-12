@@ -31,19 +31,25 @@ class SugerenciasAdapter(var listaSugerencias: ArrayList<Sugerencia>) :
         //hago todas las sugerencias invisibles
         viewHolder.itemView.visibility = View.INVISIBLE
         //todo: hacer que segun la categoria, sea visible en los distintos fragmentos
-        if(listaSugerencias[position].category == Categorias.COMER) {
-            viewHolder.itemView.visibility = View.VISIBLE
-        } else if(listaSugerencias[position].category == Categorias.DORMIR){
-            viewHolder.itemView.visibility = View.VISIBLE
-        }else if(listaSugerencias[position].category == Categorias.FIESTA){
-            viewHolder.itemView.visibility = View.VISIBLE
-        }else if(listaSugerencias[position].category == Categorias.TURISMO){
-            viewHolder.itemView.visibility = View.VISIBLE
-        }else if(listaSugerencias[position].category == Categorias.AVENTURA){
-            viewHolder.itemView.visibility = View.VISIBLE
-        }
-        else {
-            Toast.makeText(viewHolder.view.root.context, "No hay Sugerencias", Toast.LENGTH_SHORT).show()
+        when (listaSugerencias[position].category) {
+            Categorias.COMER -> {
+                viewHolder.itemView.visibility = View.VISIBLE
+            }
+            Categorias.DORMIR -> {
+                viewHolder.itemView.visibility = View.VISIBLE
+            }
+            Categorias.FIESTA -> {
+                viewHolder.itemView.visibility = View.VISIBLE
+            }
+            Categorias.TURISMO -> {
+                viewHolder.itemView.visibility = View.VISIBLE
+            }
+            Categorias.AVENTURA -> {
+                viewHolder.itemView.visibility = View.VISIBLE
+            }
+            else -> {
+                Toast.makeText(viewHolder.view.root.context, "No hay Sugerencias", Toast.LENGTH_SHORT).show()
+            }
         }
 
     }

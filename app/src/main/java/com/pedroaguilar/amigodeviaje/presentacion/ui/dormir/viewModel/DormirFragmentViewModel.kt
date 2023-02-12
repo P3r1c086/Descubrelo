@@ -28,7 +28,7 @@ class DormirFragmentViewModel: ViewModel() {
     fun cargarSugerencias(uidUser: String){
         viewModelScope.launch {
             val listaSugerencias = firebaseDatabase.obtenerTodasSugerencias(uidUser)
-            if (listaSugerencias == null){
+            if (listaSugerencias.isEmpty()){
                 _state.update { _state.value.copy(loading = false, error = Error.NoData) }
             }else{
                 _state.update { _state.value.copy(loading = false,
@@ -37,11 +37,6 @@ class DormirFragmentViewModel: ViewModel() {
 
         }
     }
-
-
-
-
-
 
     data class UiState(
         val loading: Boolean = false,
