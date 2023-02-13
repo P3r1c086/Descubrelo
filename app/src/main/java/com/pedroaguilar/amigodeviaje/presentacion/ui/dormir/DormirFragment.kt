@@ -1,13 +1,11 @@
 package com.pedroaguilar.amigodeviaje.presentacion.ui.dormir
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import com.google.firebase.auth.FirebaseAuth
-import com.pedroaguilar.amigodeviaje.R
 import com.pedroaguilar.amigodeviaje.databinding.FragmentDormirBinding
 import com.pedroaguilar.amigodeviaje.modelo.launchAndCollect
 import com.pedroaguilar.amigodeviaje.presentacion.ui.SugerenciasAdapter
@@ -33,9 +31,7 @@ class DormirFragment : Fragment() {
         viewLifecycleOwner.launchAndCollect(viewModel.state){
             adapter.listaSugerencias = it.sugerencias
             binding.rvDormir.adapter = adapter
-            FirebaseAuth.getInstance().currentUser?.let { it1 ->
-                viewModel.cargarSugerencias(it1.uid) }
         }
-
+        viewModel.cargarSugerencias()
     }
 }

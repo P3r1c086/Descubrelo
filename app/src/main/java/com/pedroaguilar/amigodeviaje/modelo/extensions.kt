@@ -3,11 +3,12 @@ package com.pedroaguilar.amigodeviaje.modelo
 import android.widget.ImageView
 import androidx.lifecycle.*
 import com.bumptech.glide.Glide
+import com.pedroaguilar.amigodeviaje.R
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 
-fun ImageView.loadUrl(url: String) {
-    Glide.with(context).load(url).into(this)
+fun ImageView.loadUrl(url: String?) {
+    Glide.with(context).load(url).error(R.mipmap.ic_launcher).into(this)
 }
 
 fun <T> Lifecycle.launchAndCollect(

@@ -1,5 +1,11 @@
 package com.pedroaguilar.amigodeviaje.modelo
 
-enum class Categorias {
-    COMER, DORMIR, FIESTA, TURISMO, AVENTURA
+import com.pedroaguilar.amigodeviaje.servicios.Constantes
+
+enum class Categorias(val value: String) {
+    COMER(Constantes.COMER),
+    DORMIR(Constantes.DORMIR),
+    FIESTA(Constantes.FIESTA),
+    TURISMO(Constantes.TURISMO),
+    AVENTURA(Constantes.AVENTURA)
 }

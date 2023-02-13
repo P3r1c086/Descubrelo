@@ -56,7 +56,7 @@ class AddFragment : Fragment() {
                 "Sugerencia subida con éxito!\n Cerrando la pantalla"
             }
             binding.error = it.error?.let(::errorToString)
-            binding.habilitarAceptar = it.category == null
+            binding.habilitarAceptar = it.category != null
                         && seleccionCorrectaSpinner()
                     && !it.nombre.isNullOrBlank()
                     && !it.descripcion.isNullOrBlank()

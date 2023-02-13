@@ -11,6 +11,7 @@ import com.pedroaguilar.amigodeviaje.modelo.Categorias
  **/
 data class Sugerencia(
     var id: String? = null,
+    var perteneceAUsuario: String? = null,
     var category: Categorias? = null,
     var typeCategory: String? = null,
     var name: String? = null,

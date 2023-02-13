@@ -5,13 +5,12 @@ import androidx.core.net.toUri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.pedroaguilar.amigodeviaje.common.Error
 import com.pedroaguilar.amigodeviaje.modelo.Categorias
-import com.pedroaguilar.amigodeviaje.modelo.Constants
 import com.pedroaguilar.amigodeviaje.modelo.entities.EventPost
 import com.pedroaguilar.amigodeviaje.modelo.entities.Sugerencia
+import com.pedroaguilar.amigodeviaje.servicios.Constantes
 import com.pedroaguilar.amigodeviaje.servicios.ServicioFirebaseDatabase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -37,13 +36,20 @@ class AddFragmentViewModel: ViewModel() {
                                                nombre: String?, descripcion: String?,
                                                imgUrl: String?){
         viewModelScope.launch {
-            val idSugerencia = firebaseDatabase.idSugerenciaUser(uidUser)
+            val idSugerencia = firebaseDatabase.idSugerenciaUser(category)
             if (idSugerencia == null){
                 _state.update { _state.value.copy(loading = false, error = Error.Server(456)) }
             } else {
                 val sugerenciaPorUsuario = firebaseDatabase.registrarSugerencia(
-                    uidUser,
-                    Sugerencia(idSugerencia, category, typeCategory, nombre, descripcion, imgUrl),
+                    Sugerencia(
+                        id = idSugerencia,
+                        perteneceAUsuario = uidUser,
+                        category = category,
+                        typeCategory = typeCategory,
+                        name = nombre,
+                        description = descripcion,
+                        imgUrl = imgUrl
+                    ),
                     idSugerencia
                 )
                 if (sugerenciaPorUsuario != null) {
@@ -82,18 +88,20 @@ class AddFragmentViewModel: ViewModel() {
         //como binding puede ser null
         //subir imagen al storage. Recibe un callBack
 
-        uploadImage { eventPost ->
-            //si la imagen fue subida correctamente
-            if (eventPost.isSuccess){
-                FirebaseAuth.getInstance().uid?.let { id -> registrarSugerenciaEnFirestore(
-                    id, category = _state.value.category,
-                    typeCategory = _state.value.typeCategory,
-                    nombre = _state.value.nombre,
-                    descripcion = _state.value.descripcion,
-                    imgUrl = eventPost.photoUrl) }
-            } else {
-                //EMITIMOS ERROR AL SUBIR LA IMAGEN: CREAR ERROR CONCRETO
-                _state.update { _state.value.copy(loading = false, error = Error.NoData) }
+        _state.value.category?.let { categoria ->
+            uploadImage(categoria) { eventPost ->
+                //si la imagen fue subida correctamente
+                if (eventPost.isSuccess){
+                    FirebaseAuth.getInstance().uid?.let { id -> registrarSugerenciaEnFirestore(
+                        id, category = _state.value.category,
+                        typeCategory = _state.value.typeCategory,
+                        nombre = _state.value.nombre,
+                        descripcion = _state.value.descripcion,
+                        imgUrl = eventPost.photoUrl) }
+                } else {
+                    //EMITIMOS ERROR AL SUBIR LA IMAGEN: CREAR ERROR CONCRETO
+                    _state.update { _state.value.copy(loading = false, error = Error.NoData) }
+                }
             }
         }
     }
@@ -102,7 +110,7 @@ class AddFragmentViewModel: ViewModel() {
     /**
      * metodo para subir imagenes al storage
      */
-    private fun uploadImage(callback: (EventPost)->Unit){ //que retorna Unit sig que no retorna nada
+    private fun uploadImage(category: Categorias, callback: (EventPost)->Unit){ //que retorna Unit sig que no retorna nada
         //creamos una nueva instancia de EventPost, la cual va a contener el documento
         val eventPost = EventPost()
         //El signo de Elvis, hace que en caso de que sea null, agarre el id del nuevo documento, sino
@@ -112,12 +120,11 @@ class AddFragmentViewModel: ViewModel() {
         // regresar ese documento para que la imagen que vayamos a subir sea asignada con el nombre
         // de este id y posteriormente, despues de que se suba nuestra imagen, ahora si, vamos a
         // agarrar el mismo document id para insertar un nuevo registro
-        eventPost.documentId = FirebaseFirestore.getInstance().collection(Constants.COLL_SUGGEST)
-            .document().id
+        eventPost.documentId = firebaseDatabase.obtenerIdDocumentoCategoria(category)
         //hacemos una instancia a la raiz del servidor
         val storageRef = FirebaseStorage.getInstance().reference
             //ponemos como hijo una carpeta donde almacenar las imagenes
-            .child(Constants.PATH_SUGGEST_IMAGES)
+            .child(Constantes.PATH_SUGGEST_IMAGES)
         //si photoSelectedUri es != de null y binding tb
         _state.value.photoSelectedUri?.let { uri ->
 

@@ -28,13 +28,13 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.carousel3d.adapter = adapter
+        binding.carousel3d.apply {
+            set3DItem(true)
+            setAlpha(true)
+        }
         viewLifecycleOwner.launchAndCollect(viewModel.state) {
             adapter.dataSet = it.sugerencias
-            binding.carousel3d.adapter = adapter
-            binding.carousel3d.apply {
-                set3DItem(true)
-                setAlpha(true)
-            }
         }
     }
 }

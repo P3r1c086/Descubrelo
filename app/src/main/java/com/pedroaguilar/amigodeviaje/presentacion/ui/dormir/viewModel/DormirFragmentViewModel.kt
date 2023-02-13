@@ -3,8 +3,8 @@ package com.pedroaguilar.amigodeviaje.presentacion.ui.dormir.viewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.pedroaguilar.amigodeviaje.common.Error
+import com.pedroaguilar.amigodeviaje.modelo.Categorias
 import com.pedroaguilar.amigodeviaje.modelo.entities.Sugerencia
-import com.pedroaguilar.amigodeviaje.presentacion.ui.main.model.SugerenciasItems
 import com.pedroaguilar.amigodeviaje.servicios.ServicioFirebaseDatabase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -25,14 +25,14 @@ class DormirFragmentViewModel: ViewModel() {
 
     private val firebaseDatabase: ServicioFirebaseDatabase = ServicioFirebaseDatabase()
 
-    fun cargarSugerencias(uidUser: String){
+    fun cargarSugerencias(){
         viewModelScope.launch {
-            val listaSugerencias = firebaseDatabase.obtenerTodasSugerencias(uidUser)
+            val listaSugerencias = firebaseDatabase.obtenerTodasSugerencias(Categorias.DORMIR)
             if (listaSugerencias.isEmpty()){
                 _state.update { _state.value.copy(loading = false, error = Error.NoData) }
             }else{
                 _state.update { _state.value.copy(loading = false,
-                    sugerencias = SugerenciasItems().defineDatas()) }
+                    sugerencias = listaSugerencias) }
             }
 
         }
