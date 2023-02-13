@@ -15,7 +15,15 @@
       },
       "oauth_client": [
         {
-          "client_id": "976015905987-rhou4nlr6uni5tuftips0nioaqgo3kvp.apps.googleusercontent.com",
+          "client_id": "976015905987-q5gkqo960u4qc39724i9nmi1cg5845iq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.pedroaguilar.amigodeviaje",
+            "certificate_hash": "0362817d313927a441bac3289439d999b8be1c3e"
+          }
+        },
+        {
+          "client_id": "976015905987-r5mc040ebu467t6ekn5lrok5jgkvjh7d.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
@@ -28,7 +36,7 @@
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "976015905987-rhou4nlr6uni5tuftips0nioaqgo3kvp.apps.googleusercontent.com",
+              "client_id": "976015905987-r5mc040ebu467t6ekn5lrok5jgkvjh7d.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
