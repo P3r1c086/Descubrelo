@@ -3,6 +3,7 @@ plugins {
     id 'org.jetbrains.kotlin.android'
     id 'com.google.gms.google-services'
     id 'kotlin-kapt'
+    id 'androidx.navigation.safeargs.kotlin'
 }
 
 android {
@@ -40,7 +41,7 @@ android {
         dataBinding true
     }
 }
-def nav_version_ktx = "2.6.0-alpha04"
+def nav_version_ktx = "2.5.3"
 def material_version = '1.7.0'
 def fragment_version = "1.5.5"
 def lifecycle_version = "2.5.1"

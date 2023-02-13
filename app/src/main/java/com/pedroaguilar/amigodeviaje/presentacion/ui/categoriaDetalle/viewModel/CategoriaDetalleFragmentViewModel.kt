@@ -1,6 +1,7 @@
-package com.pedroaguilar.amigodeviaje.presentacion.ui.dormir.viewModel
+package com.pedroaguilar.amigodeviaje.presentacion.ui.categoriaDetalle.viewModel
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.pedroaguilar.amigodeviaje.common.Error
 import com.pedroaguilar.amigodeviaje.modelo.Categorias
@@ -18,7 +19,7 @@ import kotlinx.coroutines.launch
  * More info: linkedin.com/in/pedro-aguilar-fernández-167753140
  * All rights reserved 2023
  **/
-class DormirFragmentViewModel: ViewModel() {
+class CategoriaDetalleFragmentViewModel(val categoriaId: Int): ViewModel() {
 
     private val _state = MutableStateFlow(UiState(loading = true))
     val state = _state.asStateFlow()
@@ -26,8 +27,9 @@ class DormirFragmentViewModel: ViewModel() {
     private val firebaseDatabase: ServicioFirebaseDatabase = ServicioFirebaseDatabase()
 
     fun cargarSugerencias(){
+        val categoria = Categorias.values()[categoriaId]
         viewModelScope.launch {
-            val listaSugerencias = firebaseDatabase.obtenerTodasSugerencias(Categorias.DORMIR)
+            val listaSugerencias = firebaseDatabase.obtenerTodasSugerencias(categoria)
             if (listaSugerencias.isEmpty()){
                 _state.update { _state.value.copy(loading = false, error = Error.NoData) }
             }else{
@@ -43,4 +45,12 @@ class DormirFragmentViewModel: ViewModel() {
         val sugerencias : ArrayList<Sugerencia> = ArrayList(),
         val error: Error? = null
     )
+}
+
+@Suppress("UNCHECKED_CAST")
+class CategoriaDetalleFragmentViewModelFactory(private val categoriaId: Int) :
+    ViewModelProvider.Factory {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        return CategoriaDetalleFragmentViewModel(categoriaId) as T
+    }
 }

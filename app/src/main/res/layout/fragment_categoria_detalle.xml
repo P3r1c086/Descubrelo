@@ -3,19 +3,21 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    tools:context=".presentacion.ui.aventura.AventuraFragment">
+    tools:context=".presentacion.ui.categoriaDetalle.CategoriaDetalleFragment">
 
 
     <SearchView
-        android:id="@+id/searchViewAventura"
+        android:id="@+id/searchView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/common_padding_default"/>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvAventura"
+        android:id="@+id/rv"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:listitem="@layout/sugerencia_comun_item"/>
+        tools:listitem="@layout/sugerencia_categoria_item"/>
 </LinearLayout>

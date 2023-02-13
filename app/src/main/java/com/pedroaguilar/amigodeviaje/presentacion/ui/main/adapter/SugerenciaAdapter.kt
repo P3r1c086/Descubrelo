@@ -2,14 +2,11 @@ package com.pedroaguilar.amigodeviaje.presentacion.ui.main.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
-import com.pedroaguilar.amigodeviaje.R
 import com.pedroaguilar.amigodeviaje.databinding.SugerenciaItemBinding
-import com.pedroaguilar.amigodeviaje.modelo.Categorias
 import com.pedroaguilar.amigodeviaje.modelo.entities.Sugerencia
-import com.pedroaguilar.amigodeviaje.presentacion.ui.dormir.viewModel.DormirFragmentViewModel
+import com.pedroaguilar.amigodeviaje.presentacion.ui.main.HomeFragmentDirections
 
 /**
  * Proyect: Amigo De Viaje
@@ -29,16 +26,11 @@ class SugerenciaAdapter(var dataSet: ArrayList<Sugerencia>) :
     }
 
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
-        viewHolder.view.sugerencia = dataSet[position]
+        val sugerencia = dataSet[position]
+        viewHolder.view.sugerencia = sugerencia
         viewHolder.itemView.setOnClickListener {
-            when(dataSet[position].category){
-                Categorias.COMER -> it.findNavController().navigate(R.id.action_home_dest_to_comerFragment)
-                Categorias.DORMIR -> it.findNavController().navigate(R.id.action_home_dest_to_dormirFragment)
-                Categorias.FIESTA -> it.findNavController().navigate(R.id.action_home_dest_to_fiestaFragment)
-                Categorias.TURISMO ->  it.findNavController().navigate(R.id.action_home_dest_to_turismoFragment)
-                Categorias.AVENTURA -> it.findNavController().navigate(R.id.action_home_dest_to_aventuraFragment)
-                null -> Toast.makeText(viewHolder.view.root.context, "Click No implementado", Toast.LENGTH_SHORT).show()
-            }
+            val action = HomeFragmentDirections.actionHomeDestToCategoriaFragment(sugerencia.category?.ordinal ?:0)
+            it.findNavController().navigate(action)
         }
     }
     override fun getItemCount() = dataSet.size
