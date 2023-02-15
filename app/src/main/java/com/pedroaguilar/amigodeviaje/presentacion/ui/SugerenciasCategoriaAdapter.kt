@@ -25,7 +25,6 @@ class SugerenciasCategoriaAdapter(var listaSugerencias: ArrayList<Sugerencia>) :
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
         //con esto entro a la variable sugerencia del xml
         viewHolder.view.sugerencia = listaSugerencias[position]
-
     }
 
     override fun getItemCount() = listaSugerencias.size

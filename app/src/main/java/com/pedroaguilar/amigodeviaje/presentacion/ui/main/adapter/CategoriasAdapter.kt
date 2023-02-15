@@ -15,8 +15,8 @@ import com.pedroaguilar.amigodeviaje.presentacion.ui.main.HomeFragmentDirections
  * More info: linkedin.com/in/pedro-aguilar-fernández-167753140
  * All rights reserved 2023
  **/
-class SugerenciaAdapter(var dataSet: ArrayList<Sugerencia>) :
-    RecyclerView.Adapter<SugerenciaAdapter.ViewHolder>() {
+class CategoriasAdapter(var dataSet: ArrayList<Sugerencia>) :
+    RecyclerView.Adapter<CategoriasAdapter.ViewHolder>() {
 
     private lateinit var binding: SugerenciaItemBinding
 
