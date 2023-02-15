@@ -36,6 +36,7 @@ class HomeFragmentViewModel: ViewModel() {
 
     fun obtenerTodasLasSugerencias(){
         viewModelScope.launch {
+            _state.update { _state.value.copy(loadingAllSugerencias = true) }
             val listaSugerencias = ArrayList<Sugerencia>()
             Categorias.values().forEach {
                 val listaSugerenciasPorCategoria = firebaseDatabase.obtenerTodasSugerencias(it)
@@ -43,7 +44,7 @@ class HomeFragmentViewModel: ViewModel() {
                     listaSugerencias.addAll(listaSugerenciasPorCategoria)
                 }
             }
-            _state.update { _state.value.copy(loading = false,
+            _state.update { _state.value.copy(loadingAllSugerencias = false,
                 sugerencias = listaSugerencias) }
         }
     }
@@ -52,6 +53,7 @@ class HomeFragmentViewModel: ViewModel() {
         val loading: Boolean = false,
         val categorias : ArrayList<Sugerencia> = ArrayList(),
         val sugerencias : ArrayList<Sugerencia> = ArrayList(),
+        val loadingAllSugerencias : Boolean = false,
         val error: Error? = null
     )
 }

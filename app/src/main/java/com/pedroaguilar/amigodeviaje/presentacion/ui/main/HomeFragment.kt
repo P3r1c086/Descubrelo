@@ -34,10 +34,15 @@ class HomeFragment : Fragment() {
             set3DItem(true)
             setAlpha(true)
         }
-        viewModel.obtenerTodasLasSugerencias()
         viewLifecycleOwner.launchAndCollect(viewModel.state) {
             categoriasAdapter.dataSet = it.categorias
+            binding.loadingAllSugerencias = it.loadingAllSugerencias
             binding.rvTodasSugerencias.adapter = SugerenciasCategoriaAdapter(it.sugerencias)
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.obtenerTodasLasSugerencias()
     }
 }
