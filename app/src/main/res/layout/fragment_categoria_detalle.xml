@@ -1,23 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
-    tools:context=".presentacion.ui.categoriaDetalle.CategoriaDetalleFragment">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <import type="java.util.List" />
+
+        <import type="com.pedroaguilar.amigodeviaje.modelo.entities.Sugerencia" />
+
+        <variable
+            name="sugerencias"
+            type="List&lt;Sugerencia>" />
+
+        <variable
+            name="loading"
+            type="boolean" />
+
+        <variable
+            name="error"
+            type="String" />
+
+    </data>
 
 
-    <SearchView
-        android:id="@+id/searchView"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/common_padding_default"/>
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:context=".presentacion.ui.categoriaDetalle.CategoriaDetalleFragment">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        tools:listitem="@layout/sugerencia_categoria_item"/>
-</LinearLayout>
+        <androidx.appcompat.widget.SearchView
+            android:id="@+id/searchView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/common_padding_default"
+            app:visible="@{!loading &amp;&amp; sugerencias.isEmpty() == false}"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            app:visible="@{!loading &amp;&amp; error != null}"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline4"
+            android:textColor="@color/purple_700"
+            android:layout_margin="@dimen/common_padding_default"
+            tools:text="@string/sin_datos"
+            android:text="@{error}" />
+
+        <com.google.android.material.progressindicator.CircularProgressIndicator
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:indeterminate="true"
+            android:layout_margin="@dimen/common_padding_default"
+            android:layout_gravity="center_horizontal"
+            app:visible="@{loading}"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/sugerencia_categoria_item" />
+    </LinearLayout>
+
+</layout>

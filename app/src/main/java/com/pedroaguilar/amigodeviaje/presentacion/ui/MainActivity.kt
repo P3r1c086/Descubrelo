@@ -77,6 +77,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        setSupportActionBar(binding.toolbar)
         binding.bottomNavigationView.background = null
 
         configAuth()

@@ -31,6 +31,7 @@
     <string name="connectivity_error">Connectivity Error</string>
     <string name="server_error">Server Error: </string>
     <string name="unknown_error">Unknown Error</string>
+    <string name="sin_datos">Sin Datos</string>
     <!--  Arrays-Spinner  -->
     <string-array name="sujerencias_comer">
         <item>Tipo de Local</item>

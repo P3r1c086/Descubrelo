@@ -107,6 +107,8 @@ class ServicioFirebaseDatabase {
                                 sugerenciasList.add(sugerencia)
                             }
                             continuation.resume(sugerenciasList)
+                        } else {
+                            continuation.resume( ArrayList())
                         }
                     }
             } ?: ArrayList<Sugerencia>()
