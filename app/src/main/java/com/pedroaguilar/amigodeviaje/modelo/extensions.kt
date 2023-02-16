@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 
 fun ImageView.loadUrl(url: String?) {
-    Glide.with(context).load(url).error(R.mipmap.ic_launcher).into(this)
+    Glide.with(context).load(url).placeholder(R.drawable.progress_animaton).error(R.mipmap.ic_launcher).into(this)
 }
 
 fun <T> Lifecycle.launchAndCollect(
