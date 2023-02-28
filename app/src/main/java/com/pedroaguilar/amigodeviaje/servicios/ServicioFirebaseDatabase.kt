@@ -113,4 +113,27 @@ class ServicioFirebaseDatabase {
                     }
             } ?: ArrayList<Sugerencia>()
     }
+
+    suspend fun obtenerSugerencia(categoria: Categorias?, id: String) : Sugerencia? =
+        suspendCancellableCoroutine { continuation ->
+            categoria?.let { categoria ->
+                firebaseReferenceCategoria(categoria)
+                    .get()
+                    .addOnSuccessListener { snapshots ->
+                        var sugerencia: Sugerencia? = null
+                        val numSugerencias = snapshots.size()
+                        if (numSugerencias != 0) {
+                            for (document in snapshots) {
+                                //extraer cada documento y convertirlo a sugerencia
+                                if(document.toString() == id){
+                                    sugerencia = document.toObject(Sugerencia::class.java)
+                                }
+                            }
+                            continuation.resume(sugerencia)
+                        } else {
+                            continuation.resume( null)
+                        }
+                    }
+            } ?: ArrayList<Sugerencia>()
+        }
 }

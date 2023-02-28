@@ -2,9 +2,13 @@ package com.pedroaguilar.amigodeviaje.presentacion.ui
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.pedroaguilar.amigodeviaje.databinding.SugerenciaCategoriaItemBinding
 import com.pedroaguilar.amigodeviaje.modelo.entities.Sugerencia
+import com.pedroaguilar.amigodeviaje.presentacion.ui.categoriaDetalle.CategoriaDetalleFragment
+import com.pedroaguilar.amigodeviaje.presentacion.ui.categoriaDetalle.CategoriaDetalleFragmentDirections
+import com.pedroaguilar.amigodeviaje.presentacion.ui.categoriaDetalle.CategoriaDetalleFragmentDirections.Companion.actionCategoriaDestToDetailsDest
 
 /**
  * Proyect: Amigo De Viaje
@@ -25,6 +29,10 @@ class SugerenciasCategoriaAdapter(var listaSugerencias: ArrayList<Sugerencia>) :
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
         //con esto entro a la variable sugerencia del xml
         viewHolder.view.sugerencia = listaSugerencias[position]
+        viewHolder.itemView.setOnClickListener {
+            val action = CategoriaDetalleFragmentDirections.actionCategoriaDestToDetailsDest()
+            it.findNavController().navigate(action)
+        }
     }
 
     override fun getItemCount() = listaSugerencias.size

@@ -3,6 +3,7 @@ package com.pedroaguilar.amigodeviaje.modelo
 import android.view.View
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import com.google.android.material.progressindicator.LinearProgressIndicator
 
@@ -23,4 +24,8 @@ fun Button.enabled(enabled: Boolean?) {
 @BindingAdapter("setInt")
 fun LinearProgressIndicator.setInt(value: Int) {
     progress = value
+}
+@BindingAdapter("setString")
+fun TextView.setString(value: String) {
+    text = value
 }
