@@ -26,6 +26,6 @@ fun LinearProgressIndicator.setInt(value: Int) {
     progress = value
 }
 @BindingAdapter("setString")
-fun TextView.setString(value: String) {
+fun TextView.setString(value: String?) {
     text = value
 }

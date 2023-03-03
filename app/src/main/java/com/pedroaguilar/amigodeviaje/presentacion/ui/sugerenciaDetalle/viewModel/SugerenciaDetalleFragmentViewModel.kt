@@ -1,4 +1,4 @@
-package com.pedroaguilar.amigodeviaje.presentacion.ui.details.viewModel
+package com.pedroaguilar.amigodeviaje.presentacion.ui.sugerenciaDetalle.viewModel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -6,7 +6,6 @@ import androidx.lifecycle.viewModelScope
 import com.pedroaguilar.amigodeviaje.common.Error
 import com.pedroaguilar.amigodeviaje.modelo.Categorias
 import com.pedroaguilar.amigodeviaje.modelo.entities.Sugerencia
-import com.pedroaguilar.amigodeviaje.presentacion.ui.categoriaDetalle.viewModel.CategoriaDetalleFragmentViewModel
 import com.pedroaguilar.amigodeviaje.servicios.ServicioFirebaseDatabase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -20,8 +19,8 @@ import kotlinx.coroutines.launch
  * More info: linkedin.com/in/pedro-aguilar-fernández-167753140
  * All rights reserved 2023
  **/
-class DetailsFragmentViewModel (val categoriaId: Int): ViewModel(){
-    private val _state = MutableStateFlow(DetailsFragmentViewModel.UiState(loading = true))
+class DetailsFragmentViewModel (val categoriaId: Int, val sugerenciaId: String): ViewModel(){
+    private val _state = MutableStateFlow(UiState(loading = true))
     val state = _state.asStateFlow()
 
     private val firebaseDatabase: ServicioFirebaseDatabase = ServicioFirebaseDatabase()
@@ -30,22 +29,27 @@ class DetailsFragmentViewModel (val categoriaId: Int): ViewModel(){
         //todo: Cargar una sugerencia en concreto
         val categoria = Categorias.values()[categoriaId]
         viewModelScope.launch {
-            val idSugerencia = firebaseDatabase.idSugerenciaUser(categoria)
-            if (idSugerencia != null){
-                val sugerenciaAmostrar = firebaseDatabase.obtenerSugerencia(categoria, idSugerencia)
-                if (sugerenciaAmostrar == null){
-                    _state.update { _state.value.copy(loading = false, error = Error.NoData) }
-                }else{
-                    _state.update { _state.value.copy(loading = false,
-                        sugerencia = sugerenciaAmostrar) }
-                }
+            val sugerenciaAmostrar = firebaseDatabase.obtenerSugerencia(categoria, sugerenciaId)
+            if (sugerenciaAmostrar == null){
+                _state.update { _state.value.copy(loading = false, error = Error.NoData) }
+            }else{
+                _state.update { _state.value.copy(loading = false,
+                    sugerencia = sugerenciaAmostrar) }
             }
         }
     }
 
     data class UiState(
         val loading: Boolean = false,
-        val sugerencia : Sugerencia = Sugerencia(),
+        val sugerencia : Sugerencia? = null,
         val error: Error? = null
     )
+}
+
+@Suppress("UNCHECKED_CAST")
+class DetailsFragmentViewModelFactory(private val categoriaId: Int, private val sugerenciaId: String) :
+    ViewModelProvider.Factory {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        return DetailsFragmentViewModel(categoriaId, sugerenciaId) as T
+    }
 }

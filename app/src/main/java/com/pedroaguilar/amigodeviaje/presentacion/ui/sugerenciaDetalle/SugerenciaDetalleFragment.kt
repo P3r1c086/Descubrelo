@@ -1,4 +1,4 @@
-package com.pedroaguilar.amigodeviaje.presentacion.ui.details
+package com.pedroaguilar.amigodeviaje.presentacion.ui.sugerenciaDetalle
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,23 +11,19 @@ import com.pedroaguilar.amigodeviaje.R
 import com.pedroaguilar.amigodeviaje.common.Error
 import com.pedroaguilar.amigodeviaje.databinding.FragmentDetailsBinding
 import com.pedroaguilar.amigodeviaje.modelo.launchAndCollect
-import com.pedroaguilar.amigodeviaje.presentacion.ui.SugerenciasCategoriaAdapter
-import com.pedroaguilar.amigodeviaje.presentacion.ui.categoriaDetalle.viewModel.CategoriaDetalleFragmentViewModelFactory
-import com.pedroaguilar.amigodeviaje.presentacion.ui.details.viewModel.DetailsFragmentViewModel
+import com.pedroaguilar.amigodeviaje.presentacion.ui.sugerenciaDetalle.viewModel.DetailsFragmentViewModel
+import com.pedroaguilar.amigodeviaje.presentacion.ui.sugerenciaDetalle.viewModel.DetailsFragmentViewModelFactory
 
-class DetailsFragment : Fragment() {
+class SugerenciaDetalleFragment : Fragment() {
 
-    private val safeArgs: DetailsFragmentArgs by navArgs()
+    private val safeArgs: SugerenciaDetalleFragmentArgs by navArgs()
 
     private val viewModel: DetailsFragmentViewModel by viewModels{
-        CategoriaDetalleFragmentViewModelFactory(requireNotNull(safeArgs.categoriaId))
+        DetailsFragmentViewModelFactory(safeArgs.categoriaId, safeArgs.sugerenciaId)
     }
 
     private lateinit var binding: FragmentDetailsBinding
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState:
     Bundle?): View {
         binding = FragmentDetailsBinding.inflate(inflater, container, false)

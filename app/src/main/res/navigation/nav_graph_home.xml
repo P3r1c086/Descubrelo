@@ -20,16 +20,26 @@
             app:destination="@id/categoria_dest"
             android:inAnimation="@android:anim/slide_in_left"
             android:outAnimation="@android:anim/slide_out_right"/>
+        <action
+            android:id="@+id/action_categoria_dest_to_sugerencia_detalle_dest"
+            app:destination="@id/sugerencia_detalle_dest"
+            android:inAnimation="@android:anim/slide_in_left"
+            android:outAnimation="@android:anim/slide_out_right"/>
 
     </fragment>
     <fragment
-        android:id="@+id/details_dest"
-        android:name="com.pedroaguilar.amigodeviaje.presentacion.ui.details.DetailsFragment"
+        android:id="@+id/sugerencia_detalle_dest"
+        android:name="com.pedroaguilar.amigodeviaje.presentacion.ui.sugerenciaDetalle.SugerenciaDetalleFragment"
         android:label="Detalles"
         tools:layout="@layout/fragment_details">
         <argument
             android:name="categoriaId"
             app:argType="integer"
+            android:defaultValue="-1" />
+
+        <argument
+            android:name="sugerenciaId"
+            app:argType="string"
             android:defaultValue="-1" />
     </fragment>
     <fragment
@@ -80,8 +90,8 @@
             app:argType="integer"
             android:defaultValue="-1" />
         <action
-            android:id="@+id/action_categoria_dest_to_details_dest"
-            app:destination="@id/details_dest"
+            android:id="@+id/action_categoria_dest_to_sugerencia_detalle_dest"
+            app:destination="@id/sugerencia_detalle_dest"
             android:inAnimation="@android:anim/slide_in_left"
             android:outAnimation="@android:anim/slide_out_right"/>
     </fragment>

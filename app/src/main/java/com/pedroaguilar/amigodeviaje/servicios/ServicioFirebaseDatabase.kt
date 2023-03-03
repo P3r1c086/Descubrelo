@@ -125,7 +125,7 @@ class ServicioFirebaseDatabase {
                         if (numSugerencias != 0) {
                             for (document in snapshots) {
                                 //extraer cada documento y convertirlo a sugerencia
-                                if(document.toString() == id){
+                                if(document.data["id"] == id){
                                     sugerencia = document.toObject(Sugerencia::class.java)
                                 }
                             }

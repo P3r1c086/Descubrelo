@@ -137,7 +137,7 @@ class MainActivity : AppCompatActivity() {
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
                 R.id.home_dest, R.id.profile_dest, R.id.settings_dest, R.id.favorite_dest -> showBottomNav()
-                R.id.details_dest -> hideBottomNav(hideToolbar = true)
+                R.id.sugerencia_detalle_dest -> hideBottomNav(hideToolbar = true)
                 else -> hideBottomNav()
             }
         }
