@@ -53,6 +53,7 @@
                 android:scaleType="centerCrop"
                 app:layout_collapseMode="parallax"
                 android:fitsSystemWindows="true"
+                android:background="@drawable/progress_animaton"
                 app:url="@{sugerencia.imgUrl}"
                 tools:ignore="ContentDescription" />
 
