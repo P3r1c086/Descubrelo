@@ -157,9 +157,9 @@
             android:visibility="gone"
             android:layout_marginHorizontal="78dp"
             app:visible="@{loading}"
-            app:setInt="@{progressLoading}"
             tools:visibility="visible"
-            tools:progress="75" />
+            tools:progress="75"
+            android:progress="@{progressLoading}" />
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tvProgress"
             android:layout_width="match_parent"

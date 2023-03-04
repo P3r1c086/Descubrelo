@@ -21,11 +21,11 @@ fun Button.enabled(enabled: Boolean?) {
     if (enabled == true) Button.VISIBLE else Button.INVISIBLE
 }
 
-@BindingAdapter("setInt")
-fun LinearProgressIndicator.setInt(value: Int) {
-    progress = value
-}
-@BindingAdapter("setString")
-fun TextView.setString(value: String?) {
-    text = value
-}
+//@BindingAdapter("setInt")
+//fun LinearProgressIndicator.setInt(value: Int) {
+//    progress = value
+//}
+//@BindingAdapter("setString")
+//fun TextView.setString(value: String?) {
+//    text = value
+//}
