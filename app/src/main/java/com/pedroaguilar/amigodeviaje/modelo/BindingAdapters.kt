@@ -3,9 +3,8 @@ package com.pedroaguilar.amigodeviaje.modelo
 import android.view.View
 import android.widget.Button
 import android.widget.ImageView
-import android.widget.TextView
 import androidx.databinding.BindingAdapter
-import com.google.android.material.progressindicator.LinearProgressIndicator
+import com.google.android.material.checkbox.MaterialCheckBox
 
 @BindingAdapter("url")
 fun ImageView.bindUrl(url: String?) {
@@ -19,6 +18,10 @@ fun View.setVisible(visible: Boolean?) {
 @BindingAdapter("enabled")
 fun Button.enabled(enabled: Boolean?) {
     if (enabled == true) Button.VISIBLE else Button.INVISIBLE
+}
+@BindingAdapter("checked")
+fun MaterialCheckBox.isChecked(checked: Boolean?) {
+    if (checked == true) MaterialCheckBox.STATE_CHECKED else MaterialCheckBox.STATE_CHECKED
 }
 
 //@BindingAdapter("setInt")

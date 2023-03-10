@@ -23,7 +23,8 @@ class ServicioFirebaseDatabase {
         return FirebaseFirestore.getInstance().collection(categoria.value)
     }
 
-    fun obtenerIdDocumentoCategoria(categoria: Categorias) : String = firebaseReferenceCategoria(categoria).document().id
+    fun obtenerIdDocumentoCategoria(categoria: Categorias) :
+            String = firebaseReferenceCategoria(categoria).document().id
 
     //Zona Usuario
     /**
@@ -72,6 +73,24 @@ class ServicioFirebaseDatabase {
                     }
             } ?: continuation.resume(null)
         }
+
+    suspend fun actualizarSugerencia(sugerencia: Sugerencia,
+                                        idSugerenciaUser: String): Sugerencia? =
+            suspendCancellableCoroutine { continuation ->
+                sugerencia.category?.let { categoria ->
+                    firebaseReferenceCategoria(categoria)
+                        .document(idSugerenciaUser)
+                            //todo: rellenar el mapa
+                        .update(mapOf())
+                        .addOnCompleteListener { task ->
+                            if (task.isSuccessful) {
+                                continuation.resume(sugerencia)
+                            } else {
+                                continuation.resume(null)
+                            }
+                        }
+                } ?: continuation.resume(null)
+            }
 
     suspend fun idSugerenciaUser(categoria: Categorias?): String? =
         suspendCancellableCoroutine { continuation ->

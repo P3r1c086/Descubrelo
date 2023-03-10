@@ -7,9 +7,11 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
+import com.google.firebase.auth.FirebaseAuth
 import com.pedroaguilar.amigodeviaje.R
 import com.pedroaguilar.amigodeviaje.common.Error
 import com.pedroaguilar.amigodeviaje.databinding.FragmentDetailsBinding
+import com.pedroaguilar.amigodeviaje.modelo.entities.Sugerencia
 import com.pedroaguilar.amigodeviaje.modelo.launchAndCollect
 import com.pedroaguilar.amigodeviaje.presentacion.ui.sugerenciaDetalle.viewModel.DetailsFragmentViewModel
 import com.pedroaguilar.amigodeviaje.presentacion.ui.sugerenciaDetalle.viewModel.DetailsFragmentViewModelFactory
@@ -38,6 +40,47 @@ class SugerenciaDetalleFragment : Fragment() {
             binding.error = it.error?.let(::errorToString)
         }
         viewModel.cargarSugerencia()
+        //todo: no se de donde obtener la sugerencia para pasarle a este metodo ->
+        // checkFavorite(sugerencia)
+    }
+
+    private fun checkFavorite(sugerencia: Sugerencia){
+        val idUser = FirebaseAuth.getInstance().currentUser?.uid
+        binding.cbFavorite.setOnClickListener {
+            if (binding.cbFavorite.isChecked){
+                if (idUser != null){
+                    sugerencia.listaFavoritosIdUsuarios.let {
+                        it?.add(idUser)
+                    }
+                    sugerencia.id?.let { id ->
+                        viewModel.actualizarSugerencia(
+                            id,
+                            sugerencia.category,
+                            sugerencia.typeCategory,
+                            sugerencia.name,
+                            sugerencia.description,
+                            sugerencia.imgUrl,
+                            sugerencia.listaFavoritosIdUsuarios)
+                    }
+                }
+            }else{
+                sugerencia.listaFavoritosIdUsuarios.let {
+                    it?.forEach{
+                        if (it.contains(idUser.toString())){
+                            //todo: no se como borrar el id -> it.remove(it.indexOf(idUser!!))
+                        }
+                    }
+                    viewModel.actualizarSugerencia(
+                        sugerencia.id!!,
+                        sugerencia.category,
+                        sugerencia.typeCategory,
+                        sugerencia.name,
+                        sugerencia.description,
+                        sugerencia.imgUrl,
+                        sugerencia.listaFavoritosIdUsuarios)
+                }
+            }
+        }
     }
 
     private fun errorToString(error: Error) = when (error) {
@@ -47,3 +90,5 @@ class SugerenciaDetalleFragment : Fragment() {
         else -> context?.getString(R.string.unknown_error)
     }
 }
+
+

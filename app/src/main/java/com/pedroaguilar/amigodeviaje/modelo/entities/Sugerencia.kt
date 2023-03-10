@@ -16,7 +16,8 @@ data class Sugerencia(
     var typeCategory: String? = null,
     var name: String? = null,
     var description: String? = null,
-    var imgUrl: String? = null){
+    var imgUrl: String? = null,
+    var listaFavoritosIdUsuarios: ArrayList<String>? = null){
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

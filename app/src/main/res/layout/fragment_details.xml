@@ -21,6 +21,10 @@
             type="boolean" />
 
         <variable
+            name="cbFavorite"
+            type="boolean" />
+
+        <variable
             name="error"
             type="String" />
 
@@ -58,14 +62,16 @@
                 tools:ignore="ContentDescription" />
 
 
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
+            <com.google.android.material.checkbox.MaterialCheckBox
+                android:id="@+id/cbFavorite"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom|end"
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="4dp"
-                android:backgroundTint="?attr/colorSecondaryVariant"
-                android:src="@drawable/ic_favorite_border"
+                android:button="@drawable/states_cb_favorite"
+                app:checked="@{cbFavorite}"
+                android:buttonTint="@android:color/white"
                 app:layout_anchor="@id/appbar"
                 app:layout_anchorGravity="bottom|end"
                 app:fabSize="mini"/>

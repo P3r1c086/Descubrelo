@@ -26,7 +26,6 @@ class DetailsFragmentViewModel (val categoriaId: Int, val sugerenciaId: String):
     private val firebaseDatabase: ServicioFirebaseDatabase = ServicioFirebaseDatabase()
 
     fun cargarSugerencia(){
-        //todo: Cargar una sugerencia en concreto
         val categoria = Categorias.values()[categoriaId]
         viewModelScope.launch {
             val sugerenciaAmostrar = firebaseDatabase.obtenerSugerencia(categoria, sugerenciaId)
@@ -38,10 +37,53 @@ class DetailsFragmentViewModel (val categoriaId: Int, val sugerenciaId: String):
             }
         }
     }
+    fun actualizarSugerencia(uidUser: String, category: Categorias?, typeCategory: String?,
+                             nombre: String?, descripcion: String?,
+                             imgUrl: String?, listIdUser: ArrayList<String>?){
+        viewModelScope.launch {
+            val idSugerencia = firebaseDatabase.idSugerenciaUser(category)
+            if (idSugerencia == null){
+                _state.update { _state.value.copy(
+                    loading = false,
+                    error = Error.Server(456),
+                    cbFavorite = false)
+                }
+            } else {
+                val sugerenciaPorUsuario = firebaseDatabase.actualizarSugerencia(
+                    Sugerencia(
+                        id = idSugerencia,
+                        perteneceAUsuario = uidUser,
+                        category = category,
+                        typeCategory = typeCategory,
+                        name = nombre,
+                        description = descripcion,
+                        imgUrl = imgUrl,
+                        listaFavoritosIdUsuarios = listIdUser
+                    ),
+                    idSugerencia
+                )
+                if (sugerenciaPorUsuario != null) {
+                    _state.update {
+                        _state.value.copy(
+                            loading = false,
+                            cbFavorite = true
+                        )
+                    }
+                } else {
+                    _state.update { _state.value.copy(
+                        loading = false,
+                        error = Error.Server(456),
+                        cbFavorite = false)
+                    }
+                }
+            }
+        }
+    }
 
     data class UiState(
         val loading: Boolean = false,
         val sugerencia : Sugerencia? = null,
+        val cbFavorite : Boolean? = null,
         val error: Error? = null
     )
 }
