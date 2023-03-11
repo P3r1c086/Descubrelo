@@ -10,7 +10,7 @@ import com.pedroaguilar.amigodeviaje.modelo.Categorias
  * All rights reserved 2023
  **/
 data class Sugerencia(
-    var id: String? = null,
+    var id: String,
     var perteneceAUsuario: String? = null,
     var category: Categorias? = null,
     var typeCategory: String? = null,
@@ -31,6 +31,17 @@ data class Sugerencia(
     }
 
     override fun hashCode(): Int {
-        return id?.hashCode() ?: 0
+        return id.hashCode() ?: 0
     }
 }
+
+fun Sugerencia.toMap() = mutableMapOf(
+        "id" to id,
+        "perteneceAUsuario" to perteneceAUsuario,
+        "category" to category?.value,
+        "typeCategory" to typeCategory,
+        "name" to name,
+        "description" to description,
+        "imgUrl" to imgUrl,
+        "listaFavoritosIdUsuarios" to listaFavoritosIdUsuarios
+)

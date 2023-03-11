@@ -7,11 +7,11 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
+import com.google.android.material.checkbox.MaterialCheckBox.STATE_UNCHECKED
 import com.google.firebase.auth.FirebaseAuth
 import com.pedroaguilar.amigodeviaje.R
 import com.pedroaguilar.amigodeviaje.common.Error
 import com.pedroaguilar.amigodeviaje.databinding.FragmentDetailsBinding
-import com.pedroaguilar.amigodeviaje.modelo.entities.Sugerencia
 import com.pedroaguilar.amigodeviaje.modelo.launchAndCollect
 import com.pedroaguilar.amigodeviaje.presentacion.ui.sugerenciaDetalle.viewModel.DetailsFragmentViewModel
 import com.pedroaguilar.amigodeviaje.presentacion.ui.sugerenciaDetalle.viewModel.DetailsFragmentViewModelFactory
@@ -34,52 +34,27 @@ class SugerenciaDetalleFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setCheckListener()
         viewLifecycleOwner.launchAndCollect(viewModel.state){
             binding.sugerencia = it.sugerencia
+            val checked = !it.sugerencia?.listaFavoritosIdUsuarios?.find { element ->
+                element == FirebaseAuth.getInstance().uid
+            }.isNullOrEmpty()
+            binding.favorite = if (!checked) 0  else 1
             binding.loading = it.loading
             binding.error = it.error?.let(::errorToString)
         }
         viewModel.cargarSugerencia()
-        //todo: no se de donde obtener la sugerencia para pasarle a este metodo ->
-        // checkFavorite(sugerencia)
     }
 
-    private fun checkFavorite(sugerencia: Sugerencia){
-        val idUser = FirebaseAuth.getInstance().currentUser?.uid
+    private fun setCheckListener(){
         binding.cbFavorite.setOnClickListener {
-            if (binding.cbFavorite.isChecked){
-                if (idUser != null){
-                    sugerencia.listaFavoritosIdUsuarios.let {
-                        it?.add(idUser)
-                    }
-                    sugerencia.id?.let { id ->
-                        viewModel.actualizarSugerencia(
-                            id,
-                            sugerencia.category,
-                            sugerencia.typeCategory,
-                            sugerencia.name,
-                            sugerencia.description,
-                            sugerencia.imgUrl,
-                            sugerencia.listaFavoritosIdUsuarios)
-                    }
-                }
+            if (binding.cbFavorite.checkedState == STATE_UNCHECKED){
+                viewModel.deshacerSugerenciaFavorita()
             }else{
-                sugerencia.listaFavoritosIdUsuarios.let {
-                    it?.forEach{
-                        if (it.contains(idUser.toString())){
-                            //todo: no se como borrar el id -> it.remove(it.indexOf(idUser!!))
-                        }
-                    }
-                    viewModel.actualizarSugerencia(
-                        sugerencia.id!!,
-                        sugerencia.category,
-                        sugerencia.typeCategory,
-                        sugerencia.name,
-                        sugerencia.description,
-                        sugerencia.imgUrl,
-                        sugerencia.listaFavoritosIdUsuarios)
-                }
+                viewModel.hacerSugerenciaFavorita()
             }
+            //TODO: INDETERMINATE STATE - LOADING - ENABLE FALSE DE CHECKBOX
         }
     }
 

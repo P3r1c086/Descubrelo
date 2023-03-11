@@ -48,10 +48,9 @@ class AddFragmentViewModel: ViewModel() {
                         typeCategory = typeCategory,
                         name = nombre,
                         description = descripcion,
-                        imgUrl = imgUrl
-                    ),
-                    idSugerencia
-                )
+                        imgUrl = imgUrl,
+                        listaFavoritosIdUsuarios = ArrayList()
+                    ))
                 if (sugerenciaPorUsuario != null) {
                     _state.update {
                         _state.value.copy(

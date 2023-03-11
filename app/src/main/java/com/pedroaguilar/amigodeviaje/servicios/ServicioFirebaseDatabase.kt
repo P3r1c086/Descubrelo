@@ -8,6 +8,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.pedroaguilar.amigodeviaje.modelo.Categorias
 import com.pedroaguilar.amigodeviaje.modelo.entities.Sugerencia
 import com.pedroaguilar.amigodeviaje.modelo.entities.Usuario
+import com.pedroaguilar.amigodeviaje.modelo.entities.toMap
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume
 
@@ -57,12 +58,11 @@ class ServicioFirebaseDatabase {
         }
 
     //Zona Sugerencia
-    suspend fun registrarSugerencia(sugerencia: Sugerencia,
-                                    idSugerenciaUser: String): Sugerencia? =
+    suspend fun registrarSugerencia(sugerencia: Sugerencia): Sugerencia? =
         suspendCancellableCoroutine { continuation ->
             sugerencia.category?.let { categoria ->
                 firebaseReferenceCategoria(categoria)
-                    .document(idSugerenciaUser)
+                    .document(sugerencia.id)
                     .set(sugerencia)
                     .addOnCompleteListener { task ->
                         if (task.isSuccessful) {
@@ -74,14 +74,16 @@ class ServicioFirebaseDatabase {
             } ?: continuation.resume(null)
         }
 
-    suspend fun actualizarSugerencia(sugerencia: Sugerencia,
-                                        idSugerenciaUser: String): Sugerencia? =
+    suspend fun hacerSugerenciaFavoritaParaUser(sugerencia: Sugerencia) : Sugerencia? =
             suspendCancellableCoroutine { continuation ->
                 sugerencia.category?.let { categoria ->
                     firebaseReferenceCategoria(categoria)
-                        .document(idSugerenciaUser)
-                            //todo: rellenar el mapa
-                        .update(mapOf())
+                        .document(sugerencia.id)
+                        .update(sugerencia.toMap().apply {
+                            val listaFavoritosActual = (get("listaFavoritosIdUsuarios") as ArrayList<String>)
+                            listaFavoritosActual.add(FirebaseAuth.getInstance().uid?:"")
+                            put("listaFavoritosIdUsuarios", listaFavoritosActual)
+                        }.toMap())
                         .addOnCompleteListener { task ->
                             if (task.isSuccessful) {
                                 continuation.resume(sugerencia)
@@ -92,6 +94,26 @@ class ServicioFirebaseDatabase {
                 } ?: continuation.resume(null)
             }
 
+    suspend fun quitarSugerenciaFavoritaParaUser(sugerencia: Sugerencia) : Sugerencia? =
+        suspendCancellableCoroutine { continuation ->
+            sugerencia.category?.let { categoria ->
+
+                firebaseReferenceCategoria(categoria)
+                    .document(sugerencia.id)
+                    .update(sugerencia.toMap().apply {
+                        val listaFavoritosActual = (get("listaFavoritosIdUsuarios") as ArrayList<String>)
+                        listaFavoritosActual.remove(FirebaseAuth.getInstance().uid?:"")
+                        put("listaFavoritosIdUsuarios", listaFavoritosActual)
+                    }.toMap())
+                    .addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
+                            continuation.resume(sugerencia)
+                        } else {
+                            continuation.resume(null)
+                        }
+                    }
+            } ?: continuation.resume(null)
+        }
     suspend fun idSugerenciaUser(categoria: Categorias?): String? =
         suspendCancellableCoroutine { continuation ->
             categoria?.let { categoria ->
@@ -122,7 +144,15 @@ class ServicioFirebaseDatabase {
                             val sugerenciasList: ArrayList<Sugerencia> = ArrayList()
                             for (document in snapshots) {
                                 //extraer cada documento y convertirlo a sugerencia
-                                val sugerencia = document.toObject(Sugerencia::class.java)
+                                val sugerencia = Sugerencia(
+                                    id = document.data["id"] as String,
+                                    perteneceAUsuario = document.data["perteneceAUsuario"] as String,
+                                    category = Categorias.valueOf(document.data["category"] as String),
+                                    typeCategory = document.data["typeCategory"] as String,
+                                    name = document.data["name"] as String,
+                                    description = document.data["description"] as String,
+                                    imgUrl = document.data["imgUrl"] as String,
+                                    listaFavoritosIdUsuarios = document.data["listaFavoritosIdUsuarios"] as ArrayList<String>)
                                 sugerenciasList.add(sugerencia)
                             }
                             continuation.resume(sugerenciasList)
@@ -145,7 +175,15 @@ class ServicioFirebaseDatabase {
                             for (document in snapshots) {
                                 //extraer cada documento y convertirlo a sugerencia
                                 if(document.data["id"] == id){
-                                    sugerencia = document.toObject(Sugerencia::class.java)
+                                    sugerencia = Sugerencia(
+                                        id = document.data["id"] as String,
+                                        perteneceAUsuario = document.data["perteneceAUsuario"] as String,
+                                        category = Categorias.valueOf(document.data["category"] as String),
+                                        typeCategory = document.data["typeCategory"] as String,
+                                        name = document.data["name"] as String,
+                                        description = document.data["description"] as String,
+                                        imgUrl = document.data["imgUrl"] as String,
+                                        listaFavoritosIdUsuarios = document.data["listaFavoritosIdUsuarios"] as ArrayList<String>)
                                 }
                             }
                             continuation.resume(sugerencia)

@@ -37,45 +37,24 @@ class DetailsFragmentViewModel (val categoriaId: Int, val sugerenciaId: String):
             }
         }
     }
-    fun actualizarSugerencia(uidUser: String, category: Categorias?, typeCategory: String?,
-                             nombre: String?, descripcion: String?,
-                             imgUrl: String?, listIdUser: ArrayList<String>?){
+
+    fun hacerSugerenciaFavorita(){
         viewModelScope.launch {
-            val idSugerencia = firebaseDatabase.idSugerenciaUser(category)
-            if (idSugerencia == null){
-                _state.update { _state.value.copy(
-                    loading = false,
-                    error = Error.Server(456),
-                    cbFavorite = false)
-                }
-            } else {
-                val sugerenciaPorUsuario = firebaseDatabase.actualizarSugerencia(
-                    Sugerencia(
-                        id = idSugerencia,
-                        perteneceAUsuario = uidUser,
-                        category = category,
-                        typeCategory = typeCategory,
-                        name = nombre,
-                        description = descripcion,
-                        imgUrl = imgUrl,
-                        listaFavoritosIdUsuarios = listIdUser
-                    ),
-                    idSugerencia
-                )
-                if (sugerenciaPorUsuario != null) {
-                    _state.update {
-                        _state.value.copy(
-                            loading = false,
-                            cbFavorite = true
-                        )
-                    }
-                } else {
-                    _state.update { _state.value.copy(
-                        loading = false,
-                        error = Error.Server(456),
-                        cbFavorite = false)
-                    }
-                }
+            _state.value.sugerencia?.let { sugerencia ->
+                _state.update { _state.value.copy(loading = true) }
+                //Todo proteger sugerencia devuelta como null
+                val sugerenciaActualizada = firebaseDatabase.hacerSugerenciaFavoritaParaUser(sugerencia)
+                _state.update { _state.value.copy(loading = false, sugerencia = sugerenciaActualizada) }
+            }
+        }
+    }
+
+    fun deshacerSugerenciaFavorita(){
+        viewModelScope.launch {
+            _state.value.sugerencia?.let { sugerencia ->
+                _state.update { _state.value.copy(loading = true) }
+                //Todo proteger sugerencia devuelta como null
+                _state.update { _state.value.copy(loading = false, sugerencia = firebaseDatabase.quitarSugerenciaFavoritaParaUser(sugerencia)) }
             }
         }
     }
@@ -83,7 +62,6 @@ class DetailsFragmentViewModel (val categoriaId: Int, val sugerenciaId: String):
     data class UiState(
         val loading: Boolean = false,
         val sugerencia : Sugerencia? = null,
-        val cbFavorite : Boolean? = null,
         val error: Error? = null
     )
 }

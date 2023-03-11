@@ -21,8 +21,8 @@
             type="boolean" />
 
         <variable
-            name="cbFavorite"
-            type="boolean" />
+            name="favorite"
+            type="int" />
 
         <variable
             name="error"
@@ -70,7 +70,8 @@
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="4dp"
                 android:button="@drawable/states_cb_favorite"
-                app:checked="@{cbFavorite}"
+                android:checkedState="@{favorite}"
+                tools:checkedState="1"
                 android:buttonTint="@android:color/white"
                 app:layout_anchor="@id/appbar"
                 app:layout_anchorGravity="bottom|end"
